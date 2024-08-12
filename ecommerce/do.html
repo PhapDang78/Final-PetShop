@@ -16,9 +16,6 @@
     <link rel="stylesheet" href="assets/css/colors/color-1.css">
 
     <title>Responsive e-commerce website - Crypticalcoder</title>
-
-
-    
 </head>
 <body>
     <!--=============== HEADER ===============-->
@@ -35,7 +32,7 @@
                     </li>
 
                     <li class="nav_item">
-                        <a href="shop.html" class="nav_link">CỬA HÀNG</a>
+                        <a href="shop.html" class="nav_link  active-link">CỬA HÀNG</a>
                     </li>
 
                     <li class="nav_item">
@@ -77,6 +74,7 @@
             </div>
         </nav>
     </header>
+
     <!--=============== CART ===============-->
     <div class="cart" id="cart">
         <i class="bx bx-x cart_close" id="cart-close"></i>
@@ -171,7 +169,6 @@
         </div>  
     </div>
 
-
     <!--=============== LOGIN ===============-->
     <div class="login" id="login">
         <i class="bx bx-x login_close" id="login-close"></i>
@@ -199,43 +196,156 @@
             
         </form>
     </div>
-    
     <!--=============== MAIN ===============-->
     <main class="main">
-        <!--=============== ABOUT ===============-->
-        <section class="about section container">
-            <h2 class="breadcrumb_title">About Page</h2>
-            <h3 class="breadcrumb_subtitle">Home > <span>About us</span></h3>
+        <!--=============== SHOP ===============-->
+        <section class="shop section container">
+            <h2 class="breadcrumb_title">Shop Page</h2>
+            <h3 class="breadcrumb_subtitle">Trang chủ > <span>Cửa hàng</span> > <span>Quần Áo</span></h3>
 
-            <div class="about_container grid">
-                <img src="assets/img/about-img.jpg" alt="" class="about_img">
-                <div class="about_data">
-                    <h2 class="section_title about_title">
-                        Who we really are & <br> why choose us
-                    </h2>
-                    <p class="about_description">
-                        We have over 4000+ unbiased reviews and our customers trust our products and delivery service every time.
-                    </p>
-                    <div class="about_details">
-                        <p class="about_details-description">
-                            <i class="bx bxs-check-square about_details-icon"></i>
-                            We always deliver on time.
-                        </p>
-                        <p class="about_details-description">
-                            <i class="bx bxs-check-square about_details-icon"></i>
-                            We always deliver on time.
-                        </p>
-                        <p class="about_details-description">
-                            <i class="bx bxs-check-square about_details-icon"></i>
-                            We always deliver on time.
-                        </p>
+            <div class="shop_container grid">
+                <div class="sidebar">
+                    <h3 class="filter_title">đồ dành cho chó</h3>
+                    <hr>
+
+                    <div class="filter_content">
+                        <a class="filter_subtitle" href="chuongcho.html">Chuồng chó</a>
+                        <a class="filter_subtitle" href="do.html">Quần áo</a>
+                        <a class="filter_subtitle" href="fooddog.html">Thức ăn</a>
+                        <a class="filter_subtitle" href="play.html">Đồ chơi thú cưng</a>
+
+                        <!-- classfilter gần như là bỏ -->
+
+                        
                     </div>
+                    <br>
+                    
+                    <h3 class="filter_title">đồ dành cho mèo</h3>
+                    <hr>
+
+                    <div class="filter_content">
+                        <a class="filter_subtitle" href="balocat.html">Balo cho mèo</a>
+                        <a class="filter_subtitle" href="do.html">Quần áo</a>
+                        <a class="filter_subtitle" href="foodcat.html">Thức ăn</a>
+                        <a class="filter_subtitle" href="play.html">Đồ chơi thú cưng</a>
+
+                        <!-- classfilter gần như là bỏ -->
+
+                        
+                    </div>
+            
+                    
                 </div>
-            </div>
+            
             
 
-        </section>
+                <div class="shop_items grid">
+                    <div class="shop_content">
+                        <div class="shop_tag">New</div>
+                        <img src="assets/img/new-1.png" alt="" class="shop_img">
+                        <h3 class="shop_title">Áo Hoodie Cho Chó Dễ Thương</h3>
+                        <span class="shop_subtitle">Flannel Puppy</span>
 
+                        <div class="sgop_prices">
+                            <span class="shop_price">130,000 VNĐ</span>
+                            <span class="shop_discounts">271,000 VNĐ</span>
+                            
+                        </div>
+
+                        <a href="details.html?id=4" class="button shop_button">
+                            <i class="bx bx-cart-alt shop_icon"></i>
+                        </a>
+                    </div>
+
+                    <div class="shop_content">
+                        <div class="shop_tag">Sales</div>
+                        <img src="assets/img/new-2.png" alt="" class="shop_img">
+                        <h3 class="shop_title">Quần Áo Thú Cưng Polo Sọc</h3>
+                        <span class="shop_subtitle">Cotton</span>
+
+                        <div class="sgop_prices">
+                            <span class="shop_price">125,000 VNĐ</span>
+                            <span class="shop_discounts">250,000 VNĐ</span>
+                            
+                        </div>
+
+                        <a href="details.html?id=5" class="button shop_button">
+                            <i class="bx bx-cart-alt shop_icon"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="shop_content">
+                        <div class="shop_tag">Sale</div>
+                        <img src="assets/img/new-3.png" alt="" class="shop_img">
+                        <h3 class="shop_title"> Áo Thú Cưng Ấm Áp Mùa Đông</h3>
+                        <span class="shop_subtitle">nerhemg</span>
+
+                        <div class="sgop_prices">
+                            <span class="shop_price">100,000 VNĐ</span>
+                            <span class="shop_discounts">200,000 VNĐ</span>
+                            
+                        </div>
+
+                        <a href="details.html?id=6" class="button shop_button">
+                            <i class="bx bx-cart-alt shop_icon"></i>
+                        </a>
+                    </div>
+
+                    <div class="shop_content">
+                        <div class="shop_tag">New</div>
+                        <img src="assets/img/new-5.png" alt="" class="shop_img">
+                        <h3 class="shop_title">Áo Sơ Mi Cổ Tròn Khủng Long</h3>
+                        <span class="shop_subtitle">Cotton</span>
+
+                        <div class="sgop_prices">
+                            <span class="shop_price">75,000 VNĐ</span>
+                            <span class="shop_discounts">150,000 VNĐ</span>
+                            
+                        </div>
+
+                        <a href="details.html?id=8" class="button shop_button">
+                            <i class="bx bx-cart-alt shop_icon"></i>
+                        </a>
+                    </div>
+
+                    <!-- <div class="shop_content">
+                        <div class="shop_tag">New</div>
+                        <img src="assets/img/imghavebg/chuongcho5.jpg" alt="" class="shop_img">
+                        <h3 class="shop_title">Nhà chó mini</h3>
+                        <span class="shop_subtitle">Accessory</span>
+
+                        <div class="sgop_prices">
+                            <span class="shop_price"></span>
+                            <span class="shop_discounts"></span>
+                            
+                        </div>
+
+                        <a href="details.html" class="button shop_button">
+                            <i class="bx bx-cart-alt shop_icon"></i>
+                        </a>
+                    </div>
+
+                    <div class="shop_content">
+                        <div class="shop_tag">sale</div>
+                        <img src="assets/img/imghavebg/chuongcho6.jpg   " alt="" class="shop_img">
+                        <h3 class="shop_title">Chuồng chó kẽm</h3>
+                        <span class="shop_subtitle">Accessory</span>
+
+                        <div class="sgop_prices">
+                            <span class="shop_price"></span>
+                            <span class="shop_discounts"></span>
+                            
+                        </div>
+
+                        <a href="details.html" class="button shop_button">
+                            <i class="bx bx-cart-alt shop_icon"></i>
+                        </a>
+                    </div> -->
+                </div>
+            </div>
+
+            
+        </section>
     </main>
 
     <!--=============== FOOTER ===============-->

@@ -749,10 +749,10 @@ header {
 
 /* KHI SỬ DỤNG 4 ẢNH THÌ BỎ COMMNET NÀY ĐI */
 /* ---------UNLOCK-------- */
-.product_images{
+/* .product_images{ */
      /* grid-template-columns: repeat(2, 1fr);  */
      /* gap: 1.4rem;  */
-}
+/* } */
 /* ----------UNLOCK------- */
 
 .product_img{
@@ -777,9 +777,9 @@ header {
     border-radius: .25rem;
 }
 
-.product_img img{
+/* .product_img img{ */
     /* width: 150px; */
-}
+/* } */
 
 .details_subtitle{
     font-size: var(--small-font-size);
