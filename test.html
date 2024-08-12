@@ -3,23 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh Mục</title>
+    <title>Sidebar</title>
     <style>
-        .category {
-            display: inline-block;
-            background-color: #d19a6a; /* Màu nền tương tự */
-            color: white; /* Màu chữ */
-            padding: 10px 20px; /* Khoảng cách bên trong */
-            border-radius: 5px; /* Bo góc */
-            font-size: 24px; /* Kích thước chữ */
-            font-weight: bold; /* Chữ đậm */
-            text-align: center; /* Canh giữa chữ */
-            text-transform: uppercase; /* Chữ in hoa */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            width: 250px; /* Chiều rộng của sidebar */
+            background-color: #f9f9f9; /* Màu nền của sidebar */
+            padding: 20px; /* Khoảng cách bên trong */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+        }
+
+        .filter_title {
+            font-size: 20px; /* Kích thước chữ tiêu đề */
+            color: #333; /* Màu chữ tiêu đề */
+            margin: 10px 0; /* Khoảng cách trên và dưới */
+        }
+
+        hr {
+            border: 1px solid #d1d1d1; /* Đường kẻ */
+            margin: 10px 0; /* Khoảng cách trên và dưới */
+        }
+
+        .filter_content {
+            margin-bottom: 20px; /* Khoảng cách dưới cùng của nội dung */
+        }
+
+        .filter_subtitle {
+            display: block; /* Hiển thị mỗi liên kết trên một dòng mới */
+            color: #007bff; /* Màu chữ liên kết */
+            text-decoration: none; /* Bỏ gạch chân */
+            padding: 5px 0; /* Khoảng cách bên trong */
+            transition: color 0.3s; /* Hiệu ứng chuyển màu khi hover */
+        }
+
+        .filter_subtitle:hover {
+            color: #0056b3; /* Màu chữ khi hover */
         }
     </style>
 </head>
 <body>
-    <div class="category">DANH MỤC</div>
+    <div class="sidebar">
+        <h3 class="filter_title">Đồ dành cho chó</h3>
+        <hr>
+        <div class="filter_content">
+            <a class="filter_subtitle" href="">Balo cho chó</a>
+            <a class="filter_subtitle" href="">Quần áo</a>
+            <a class="filter_subtitle" href="">Thức ăn</a>
+            <a class="filter_subtitle" href="">Đồ chơi thú cưng</a>
+            <a class="filter_subtitle" href="">Thực phẩm chức năng</a>
+        </div>
+
+        <h3 class="filter_title">Đồ dành cho mèo</h3>
+        <hr>
+        <div class="filter_content">
+            <a class="filter_subtitle" href="">Balo cho mèo</a>
+            <a class="filter_subtitle" href="">Quần áo</a>
+            <a class="filter_subtitle" href="">Thức ăn</a>
+            <a class="filter_subtitle" href="">Đồ chơi thú cưng</a>
+            <a class="filter_subtitle" href="">Thực phẩm chức năng</a>
+        </div>
+    </div>
 </body>
 </html>
+

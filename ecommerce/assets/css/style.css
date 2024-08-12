@@ -106,6 +106,10 @@ input {
     outline: none;
 }
 
+.nav_logo img{
+    width: 120px;
+}
+
 /*=============== REUSABLE CSS CLASSES ===============*/
 .section {
     padding: 7rem 0 2rem;
@@ -613,6 +617,17 @@ header {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng */
 }
 
+.filter_subtitle {
+    color: var(--text-color);
+    display: block; /* Hiển thị mỗi liên kết trên một dòng mới */
+    text-decoration: none; /* Bỏ gạch chân */
+    padding: 5px 0; /* Khoảng cách bên trong */
+    transition: color 0.3s; /* Hiệu ứng chuyển màu khi hover */
+}
+.filter_subtitle:hover {
+    color: #d19a6a;
+}
+
 .shop_items {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.6rem;
@@ -727,16 +742,16 @@ header {
 
 
 .details_container{
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
+        grid-template-columns: repeat(2, 1fr);
+    /* align-items: center; */
     column-gap: 3rem;
 }
 
 /* KHI SỬ DỤNG 4 ẢNH THÌ BỎ COMMNET NÀY ĐI */
 /* ---------UNLOCK-------- */
 .product_images{
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.4rem;
+     /* grid-template-columns: repeat(2, 1fr);  */
+     /* gap: 1.4rem;  */
 }
 /* ----------UNLOCK------- */
 
@@ -763,7 +778,7 @@ header {
 }
 
 .product_img img{
-    width: 150px;
+    /* width: 150px; */
 }
 
 .details_subtitle{
