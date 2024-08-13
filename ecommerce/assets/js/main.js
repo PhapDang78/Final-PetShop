@@ -353,7 +353,7 @@ const products = [
 
 ];
 
-let quantity = 1
+let quantity = 1;
 
 // Lấy tham số id từ URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -383,8 +383,6 @@ if (product) {
 					<i class="bx bxs-star"></i>
 				</div>
 				<span class="reviews_count">40 + Reviews</span>
-			
-
 			</div>
 			<div class="details_prices">
 				<span class="details_price">${product.price}</span>
@@ -399,19 +397,54 @@ if (product) {
 			</div>
 			<div class="cart_amount">
 				<div class="cart_amount-content">
-					<span class="cart_amount-box">
+					<span class="cart_amount-box" id="decrease">
 						<i class="bx bx-minus"></i>
 					</span>
-					<span class="cart_amount-number">1</span>
-					<span class="cart_amount-box">
+					<span class="cart_amount-number" id="amount">1</span>
+					<span class="cart_amount-box" id="increase">
 						<i class="bx bx-plus"></i>
 					</span>
 				</div>
 			</div>
-			<a href="cart.html" class="button">Thêm vào giỏ</a>
+			<a href="cart.html" class="button" onclick="addToCart(${product.id})">Thêm vào giỏ</a>
 		</div>
 	`;
-	
+
+	// Thêm sự kiện cho các nút tăng và giảm
+	document.getElementById('increase').addEventListener('click', function() {
+	    let amountElement = document.getElementById('amount');
+	    let currentAmount = parseInt(amountElement.textContent);
+	    amountElement.textContent = currentAmount + 1;
+	});
+
+	document.getElementById('decrease').addEventListener('click', function() {
+	    let amountElement = document.getElementById('amount');
+	    let currentAmount = parseInt(amountElement.textContent);
+	    if (currentAmount > 1) { // Đảm bảo số lượng không giảm xuống dưới 1
+	        amountElement.textContent = currentAmount - 1;
+	    }
+	});
+
 } else {
 	document.getElementById('product-details').innerHTML = `<p>Không tìm thấy sản phẩm.</p>`;
 }
+
+
+
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (product) {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const existingItem = cart.find(item => item.id === productId);
+
+        if (existingItem) {
+            existingItem.quantity += 1; // Tăng số lượng nếu sản phẩm đã có trong giỏ
+        } else {
+            cart.push({ id: productId, quantity: 1 }); // Thêm sản phẩm mới vào giỏ
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart)); // Cập nhật giỏ hàng vào localStorage
+        alert('Sản phẩm đã được thêm vào giỏ hàng!');
+    }
+}
+
