@@ -473,7 +473,7 @@ header {
     font-weight: var(--font-medium);
 }
 
-.new_button {
+.new_button-cart {
     display: inline-flex;
     padding: .5rem;
     border-radius: .25rem.25rem .75rem .25rem;
@@ -481,16 +481,30 @@ header {
     bottom: 0;
     right: -3rem;
 }
-    
+
+.new_button-show {
+    display: inline-flex;
+    padding: .5rem;
+    border-radius: .25rem.25rem .75rem .25rem;
+    position: absolute;
+    bottom: 3rem;
+    right: -3rem;
+}
+
 .new_icon{
     font-size: 1.25rem;
 }
+  
 
 .new_content:hover .new_img {
     transform: translateY(-.5rem);
 }
 
-.new_content:hover .new_button {
+.new_content:hover .new_button-cart {
+    right: 0;
+}
+
+.new_content:hover .new_button-show {
     right: 0;
 }
 /*========== STEPS SECTION ==========*/
@@ -689,7 +703,7 @@ header {
     font-weight: var(--font-medium);
 }
 
-.shop_button {
+.shop_button-cart {
     display: inline-flex;
     padding: .5rem;
     border-radius: .25rem .25rem .75rem .25rem;
@@ -698,22 +712,36 @@ header {
     right: -3rem;
 }
 
-.shop_icon {
-    font-size: 1.25rem;
+.shop_button-show {
+    display: inline-flex;
+    padding: .5rem;
+    border-radius: .25rem .25rem .75rem .25rem;
+    position: absolute;
+    bottom: 3rem;
+    right: -3rem;
 }
+
+/* .shop_icon-cart,
+.shop_icon-show {
+    font-size: 1.25rem;
+} */
 
 
 .shop_content:hover .shop_img {
     transform: translateY(-.5rem);
 }
 
-.shop_content:hover .shop_button{
+.shop_content:hover .shop_button-show{
+    right: 0;
+}
+
+.shop_content:hover .shop_button-cart{
     right: 0;
 }
 
 
 /*=============== PAGINATION ===============*/
-.pagination {
+/* .pagination {
     display: flex;
     align-items: center;
     justify-content: end;
@@ -734,7 +762,7 @@ header {
 .pagination .current {
     background-color: var(--first-color);
     color: #fff;
-}
+} */
 
 
 
