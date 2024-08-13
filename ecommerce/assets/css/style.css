@@ -8,6 +8,7 @@
     /*========== Colors ==========*/
     --title-color: hsl(250, 8%, 15%);
     --text-color: hsl(250, 8%, 35%);
+    
     --body-color: hsl(250, 60%, 98%);
     --container-color: #fff;
     --shadow: hsla(0, 0%, 15%, .1);
