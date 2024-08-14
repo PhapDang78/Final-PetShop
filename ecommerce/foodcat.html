@@ -78,97 +78,109 @@
     <!--=============== CART ===============-->
     <div class="cart" id="cart">
         <i class="bx bx-x cart_close" id="cart-close"></i>
-
+    
         <h2 class="cart_title-center">Giỏ hàng</h2>
-        <div class="cart_container">
-            <article class="cart_card">
-                <div class="cart_box">
-                    <img src="assets/img/cart-1.png" alt="" class="cart_img">
-                </div>
-
-                <div class="cart_details">
-                    <h3 class="cart_title">Thức ăn cho chó <br> royal canin pate</h3>
-                    <span class="cart_price">120,000 VNĐ</span>
-
-                    <div class="cart_amount">
-                        <div class="cart_amount-content">
-                            <span class="cart_amount-box">
-                                <i class="bx bx-minus"></i>
-                            </span>
-
-                            <span class="cart_amount-number">1</span>
-
-                            <span class="cart_amount-box">
-                                <i class="bx bx-plus"></i>
-                            </span>
-                        </div>
-
-                        <i class="bx bx-trash-alt cart_amount-trash"></i>
-                    </div>
-                </div>
-            </article>
-
-            <article class="cart_card">
-                <div class="cart_box">
-                    <img src="assets/img/cart-2.png" alt="" class="cart_img">
-                </div>
-
-                <div class="cart_details">
-                    <h3 class="cart_title">Thức ăn cho chó <br> royal canin pate</h3>
-                    <span class="cart_price">180,000 VNĐ</span>
-
-                    <div class="cart_amount">
-                        <div class="cart_amount-content">
-                            <span class="cart_amount-box">
-                                <i class="bx bx-minus"></i>
-                            </span>
-
-                            <span class="cart_amount-number">1</span>
-
-                            <span class="cart_amount-box">
-                                <i class="bx bx-plus"></i>
-                            </span>
-                        </div>
-
-                        <i class="bx bx-trash-alt cart_amount-trash"></i>
-                    </div>
-                </div>
-            </article>
-
-            <article class="cart_card">
-                <div class="cart_box">
-                    <img src="assets/img/cart-3.png" alt="" class="cart_img">
-                </div>
-
-                <div class="cart_details">
-                    <h3 class="cart_title">Dog Hoodie</h3>
-                    <span class="cart_price">200,000VNĐ</span>
-
-                    <div class="cart_amount">
-                        <div class="cart_amount-content">
-                            <span class="cart_amount-box">
-                                <i class="bx bx-minus"></i>
-                            </span>
-
-                            <span class="cart_amount-number">1</span>
-
-                            <span class="cart_amount-box">
-                                <i class="bx bx-plus"></i>
-                            </span>
-                        </div>
-
-                        <i class="bx bx-trash-alt cart_amount-trash"></i>
-                    </div>
-                </div>
-            </article>
+        <div class="cart_container" id="cart-items">
+            <!-- Các sản phẩm sẽ được thêm vào đây thông qua JavaScript -->
         </div>
-
+    
         <div class="cart_prices">
-            <span class="cart_prices-item">3 mặt hàng</span>
-            <span class="cart_prices-total">500,000 VNĐ</span>
+            <span class="cart_prices-item" id="item-count">0 mặt hàng</span>
+            <span class="cart_prices-total" id="total-price">0 VNĐ</span>
         </div>  
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartContainer = document.getElementById('cart-items');
+            const itemCount = document.getElementById('item-count');
+            const totalPrice = document.getElementById('total-price');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+            function renderCart() {
+                cartContainer.innerHTML = '';
+                let total = 0;
+
+                if (cart.length === 0) {
+                    cartContainer.innerHTML = '<p>Giỏ hàng của bạn trống.</p>';
+                } else {
+                    cart.forEach(item => {
+                        total += parseFloat(item.price) * parseInt(item.quantity);
+                        cartContainer.innerHTML += `
+                            <article class="cart_card">
+                                <div class="cart_box">
+                                    <img src="${item.img}" alt="${item.title}" class="cart_img">
+                                </div>
+                                <div class="cart_details">
+                                    <h3 class="cart_title">${item.title}</h3>
+                                    <span class="cart_price">${item.price} VNĐ</span>
+                                    <div class="cart_amount">
+                                        <div class="cart_amount-content">
+                                            <span class="cart_amount-box decrease" data-id="${item.id}">
+                                                <i class="bx bx-minus"></i>
+                                            </span>
+                                            <span class="cart_amount-number">${item.quantity}</span>
+                                            <span class="cart_amount-box increase" data-id="${item.id}">
+                                                <i class="bx bx-plus"></i>
+                                            </span>
+                                        </div>
+                                        <i class="bx bx-trash-alt cart_amount-trash remove" data-id="${item.id}"></i>
+                                    </div>
+                                </div>
+                            </article>
+                        `;
+                    });
+
+                    itemCount.textContent = `${cart.length} mặt hàng`;
+                    totalPrice.textContent = `${total.toLocaleString()},000 VNĐ`;
+
+                    document.querySelectorAll('.increase').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const productId = parseInt(this.dataset.id);
+                            updateCartQuantity(productId, 1);
+                        });
+                    });
+
+                    document.querySelectorAll('.decrease').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const productId = parseInt(this.dataset.id);
+                            updateCartQuantity(productId, -1);
+                        });
+                    });
+
+                    document.querySelectorAll('.remove').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const productId = parseInt(this.dataset.id);
+                            removeFromCart(productId);
+                        });
+                    });
+                }
+            }
+
+            function updateCartQuantity(productId, change) {
+                const item = cart.find(product => product.id === productId);
+                if (item) {
+                    item.quantity += change;
+                    if (item.quantity <= 0) {
+                        cart.splice(cart.indexOf(item), 1);
+                    }
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCart();
+                }
+            }
+
+            function removeFromCart(productId) {
+                const itemIndex = cart.findIndex(product => product.id === productId);
+                if (itemIndex > -1) {
+                    cart.splice(itemIndex, 1);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCart();
+                }
+            }
+
+            renderCart();
+        });
+    </script>
     <!--=============== LOGIN ===============-->
    
     <div class="login" id="login">

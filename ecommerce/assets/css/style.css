@@ -1420,6 +1420,23 @@ header {
     right: 0;
 }
 
+.main {
+    padding-top: 4rem; /* Để tránh che khuất header */
+}
+
+.cart__page {
+    padding: 2rem 0;
+}
+
+.cart_summary {
+    margin-top: 2rem;
+    text-align: right;
+}
+
+.cart_summary h3 {
+    margin: 0.5rem 0;
+}
+
 /*=============== LIGHTBOX ===============*/
 
 

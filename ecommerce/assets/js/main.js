@@ -402,7 +402,7 @@ if (product) {
 					</span>
 				</div>
 			</div>
-			<a href="cart.html" class="button" onclick="addToCart(${product.id})">Thêm vào giỏ</a>
+			<a href="#" class="button" onclick="addToCart(${product.id})">Thêm vào giỏ</a>
 		</div>
 	`;
 
@@ -459,7 +459,11 @@ function addToCart(productId) {
 
         // Hiển thị thông báo
         alert(`${product.title} đã được thêm vào giỏ hàng!`);
+
+        location.reload();
     }
 }
+
+
 
 
