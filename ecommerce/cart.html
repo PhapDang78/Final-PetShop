@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="assets/css/colors/color-1.css">
 
     <title>Responsive e-commerce website - Crypticalcoder</title>
+
 </head>
 <body>
     <!--=============== HEADER ===============-->
@@ -201,7 +202,9 @@
     <main class="main">
         <!--=============== CART ===============-->
         <section class="cart__page section container">
-            
+            <div class="cart_container grid" id="cart-items">
+                
+            </div>
         </section>
     </main>
 
@@ -273,5 +276,89 @@
 
     <!--=============== JS ===============-->
     <script src="assets/js/main.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartContainer = document.getElementById('cart-items');
+
+        if (cart.length === 0) {
+            cartContainer.innerHTML = '<p>Giỏ hàng của bạn trống.</p>';
+        } else {
+            cart.forEach(item => {
+                cartContainer.innerHTML += `
+                    <article class="cart_card">
+                        <div class="cart_box">
+                            <img src="${item.img}" alt="${item.title}" class="cart_img">
+                        </div>
+
+                        <div class="cart_details">
+                            <h3 class="cart_title">${item.title}</h3>
+                            <span class="cart_price">${item.price} VNĐ</span>
+
+                            <div class="cart_amount">
+                                <div class="cart_amount-content">
+                                    <span class="cart_amount-box decrease" data-id="${item.id}">
+                                        <i class="bx bx-minus"></i>
+                                    </span>
+
+                                    <span class="cart_amount-number">${item.quantity}</span>
+
+                                    <span class="cart_amount-box increase" data-id="${item.id}">
+                                        <i class="bx bx-plus"></i>
+                                    </span>
+                                </div>
+
+                                <i class="bx bx-trash-alt cart_amount-trash remove" data-id="${item.id}"></i>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+
+            // Thêm sự kiện cho các nút tăng và giảm
+            document.querySelectorAll('.increase').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.dataset.id);
+                    updateCartQuantity(productId, 1);
+                });
+            });
+
+            document.querySelectorAll('.decrease').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.dataset.id);
+                    updateCartQuantity(productId, -1);
+                });
+            });
+
+            document.querySelectorAll('.remove').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.dataset.id);
+                    removeFromCart(productId);
+                });
+            });
+        }
+    });
+
+    function updateCartQuantity(productId, change) {
+        let cart = JSON.parse(localStorage.getItem('cart'));
+        const item = cart.find(product => product.id === productId);
+        if (item) {
+            item.quantity += change;
+            if (item.quantity <= 0) {
+                cart = cart.filter(product => product.id !== productId);
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            location.reload(); // Làm mới để cập nhật hiển thị
+        }
+    }
+
+    function removeFromCart(productId) {
+        let cart = JSON.parse(localStorage.getItem('cart'));
+        cart = cart.filter(product => product.id !== productId);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        location.reload(); // Làm mới để cập nhật hiển thị
+    }
+
+    </script>
 </body>
 </html>
