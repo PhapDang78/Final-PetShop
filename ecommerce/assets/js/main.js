@@ -403,6 +403,7 @@ if (product) {
 				</div>
 			</div>
 			<a href="#" class="button" onclick="addToCart(${product.id})">Thêm vào giỏ</a>
+            <a href="cart.html" class="button" onclick="addToCart(${product.id})">Mua Ngay</a>
 		</div>
 	`;
 
