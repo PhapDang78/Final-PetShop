@@ -106,6 +106,8 @@
 
                 if (cart.length === 0) {
                     cartContainer.innerHTML = '<p>Giỏ hàng của bạn trống.</p>';
+                    itemCount.textContent = 0;
+                    totalPrice.textContent = '0 VNĐ';
                 } else {
                     cart.forEach(item => {
                         total += parseFloat(item.price) * parseInt(item.quantity);
