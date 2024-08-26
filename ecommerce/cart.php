@@ -1,6 +1,7 @@
 <?php
 include 'connectdb.php'; // Kết nối cơ sở dữ liệu
 session_start(); // Khởi tạo phiên
+$error = ''; // Biến để lưu thông báo lỗi
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email']; // Nhận email từ form
@@ -21,10 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: ' . $_SERVER['PHP_SELF']); // Chuyển hướng về trang hiện tại
             exit();
         } else {
-            echo '<p style="color: red;">Mật khẩu không đúng!</p>';
+            $error = 'Mật khẩu không đúng!'; // Lưu thông báo lỗi
         }
     } else {
-        echo '<p style="color: red;">Email không tồn tại!</p>';
+        $error = 'Email không tồn tại!'; // Lưu thông báo lỗi
     }
 }
 ?>
@@ -130,6 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="password" class="login_label">Mật khẩu</label>
                     <input type="password" class="login_input" name="password" required>
                 </div>
+
+                <?php if ($error): ?>
+                    <p style="color: red;"><?php echo $error; ?></p> <!-- Hiển thị thông báo lỗi -->
+                <?php endif; ?>
 
                 <div>
                     <button type="submit" class="button">Đăng Nhập</button>
