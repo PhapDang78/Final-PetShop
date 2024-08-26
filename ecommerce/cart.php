@@ -150,14 +150,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!--=============== MAIN ===============-->
     <main class="main">
         <!--=============== CART ===============-->
-        <section class="cart__page section container">
-            <div class="cart_container grid" id="cart-items"></div>
-            <div class="cart_summary">
-                <h3>Tổng sản phẩm: <span id="item-count">0</span></h3>
-                <h3>Tổng giá tiền: <span id="total-price">0 VNĐ</span></h3>
-                <button id="checkout-button" class="button">Thanh Toán</button>
-            </div>
-        </section>
+<section class="cart__page section container">
+    <div class="cart_container grid" id="cart-items"></div>
+    <div class="cart_summary">
+       
+        
+        <!-- Khu địa chỉ nhận hàng -->
+        <div class="shipping_address">
+            <h3>Địa chỉ nhận hàng</h3>
+            <input type="text" id="full-name" placeholder="Họ và tên người nhận" required>
+            <input type="text" id="address" placeholder="Nhập địa chỉ nhận hàng" required>
+            <input type="text" id="phone" placeholder="Nhập số điện thoại" required>
+        </div>
+
+        <h3>Tổng sản phẩm: <span id="item-count">0</span></h3>
+        <h3>Tổng giá tiền: <span id="total-price">0 VNĐ</span></h3>
+
+
+        <button id="checkout-button" class="button">Thanh Toán</button>
+    </div>
+</section>
         
     </main>
 
@@ -333,38 +345,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         renderCart();
     }
 
-    // Xử lý sự kiện cho nút thanh toán
-    checkoutButton.addEventListener('click', function() {
-        if (cart.length === 0) {
-            alert('Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm trước khi thanh toán.');
-            return;
-        }
+   // Xử lý sự kiện cho nút thanh toán
+checkoutButton.addEventListener('click', function() {
+    const fullName = document.getElementById('full-name').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const phone = document.getElementById('phone').value.trim();
 
-        console.log(cart);
-        // Gửi thông tin giỏ hàng đến server
-        fetch('process_checkout.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(cart),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Có lỗi xảy ra trong quá trình thanh toán.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert('Thanh toán thành công!'); // Hoặc xử lý theo phản hồi từ server
-            localStorage.removeItem('cart'); // Xóa giỏ hàng sau khi thanh toán
-            renderCart(); // Cập nhật lại giỏ hàng
-        })
-        .catch(error => {
-            alert(`Lỗi: ${error.message}`);
-        });
-        
+    // Kiểm tra xem các trường địa chỉ có được nhập hay không
+    if (!fullName || !address || !phone) {
+        alert('Vui lòng nhập đầy đủ thông tin địa chỉ nhận hàng.');
+        return;
+    }
+
+    if (cart.length === 0) {
+        alert('Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm trước khi thanh toán.');
+        return;
+    }
+
+    console.log(cart);
+    // Gửi thông tin giỏ hàng đến server
+    fetch('process_checkout.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(cart),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Có lỗi xảy ra trong quá trình thanh toán.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('Thanh toán thành công!'); // Hoặc xử lý theo phản hồi từ server
+        localStorage.removeItem('cart'); // Xóa giỏ hàng sau khi thanh toán
+        location.reload(); // Tải lại trang để cập nhật giỏ hàng
+    })
+    .catch(error => {
+        alert(`Lỗi: ${error.message}`);
     });
+});
+
+
     // Render giỏ hàng khi trang được tải
     renderCart();
 });
@@ -373,3 +396,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
 </body>
 </html>
+
+
+<style>
+    .shipping_address {
+        width: 70%;
+    margin-top: 20px;
+    background-color: #f9f9f9; /* Màu nền sáng hơn */
+    padding: 20px; /* Khoảng cách bên trong */
+    border-radius: 10px; /* Bo góc mềm mại */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ hơn */
+    border: 1px solid #e0e0e0; /* Đường viền nhẹ */
+}
+
+.shipping_address h3 {
+    font-size: 1.5rem; /* Kích thước tiêu đề lớn hơn */
+    margin-bottom: 15px; /* Khoảng cách dưới tiêu đề */
+    color: #333; /* Màu chữ tối hơn */
+    font-weight: 600; /* Đậm hơn */
+    text-align: center; /* Căn giữa tiêu đề */
+}
+
+.shipping_address input {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    padding: 12px; /* Khoảng cách bên trong */
+    margin-bottom: 15px; /* Khoảng cách dưới input */
+    border: 1px solid #ccc; /* Đường viền màu xám nhạt */
+    border-radius: 5px; /* Bo góc */
+    font-size: 1rem; /* Kích thước chữ */
+    color: #555; /* Màu chữ tối hơn */
+    background-color: #fff; /* Màu nền trắng */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển màu đường viền và đổ bóng */
+}
+
+.shipping_address input:focus {
+    border-color: #007bff; /* Đổi màu đường viền khi focus */
+    outline: none; /* Bỏ viền mặc định */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Thêm đổ bóng khi focus */
+}
+
+.shipping_address input::placeholder {
+    color: #aaa; /* Màu chữ placeholder */
+    font-style: italic; /* In nghiêng placeholder */
+}
+
+</style>
