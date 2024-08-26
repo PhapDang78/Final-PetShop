@@ -150,26 +150,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!--=============== MAIN ===============-->
     <main class="main">
         <!--=============== CART ===============-->
-<section class="cart__page section container">
+        <section class="cart__page section container">
     <div class="cart_container grid" id="cart-items"></div>
     <div class="cart_summary">
-       
-        
-        <!-- Khu địa chỉ nhận hàng -->
         <div class="shipping_address">
             <h3>Địa chỉ nhận hàng</h3>
             <input type="text" id="full-name" placeholder="Họ và tên người nhận" required>
             <input type="text" id="address" placeholder="Nhập địa chỉ nhận hàng" required>
             <input type="text" id="phone" placeholder="Nhập số điện thoại" required>
         </div>
-
-        <h3>Tổng sản phẩm: <span id="item-count">0</span></h3>
-        <h3>Tổng giá tiền: <span id="total-price">0 VNĐ</span></h3>
-
-
-        <button id="checkout-button" class="button">Thanh Toán</button>
+        <div class="cart_totals">
+            <h3>Tổng sản phẩm: <span id="item-count">0</span></h3>
+            <h3>Tổng giá tiền: <span id="total-price">0 VNĐ</span></h3>
+            <button id="checkout-button" class="button">Thanh Toán</button>
+        </div>
     </div>
 </section>
+
         
     </main>
 
@@ -440,4 +437,43 @@ checkoutButton.addEventListener('click', function() {
     font-style: italic; /* In nghiêng placeholder */
 }
 
+
+
+
+.cart_summary {
+    display: grid;
+    grid-template-columns: 1fr 300px; /* Cột cho thông tin giao hàng và tổng giá */
+    gap: 20px; /* Khoảng cách giữa các cột */
+    margin-top: 2rem; /* Khoảng cách trên */
+}
+
+.shipping_address {
+    width: 100%;
+    background-color: #f9f9f9; /* Màu nền sáng hơn */
+    padding: 20px; /* Khoảng cách bên trong */
+    border-radius: 10px; /* Bo góc mềm mại */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ hơn */
+    border: 1px solid #e0e0e0; /* Đường viền nhẹ */
+}
+
+.cart_totals {
+    background-color: #f9f9f9; /* Màu nền cho khu tổng giá */
+    padding: 20px; /* Khoảng cách bên trong */
+    border-radius: 10px; /* Bo góc mềm mại */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ hơn */
+    border: 1px solid #e0e0e0; /* Đường viền nhẹ */
+}
+
+.cart_totals h3 {
+    margin: 0.5rem 0; /* Khoảng cách cho tiêu đề */
+}
+
+.cart_totals button {
+    margin-top: 1rem; /* Khoảng cách trên cho nút */
+    width: 100%; /* Đặt nút chiếm toàn bộ chiều rộng */
+}
+
+
 </style>
+
+
