@@ -25,8 +25,10 @@ $totalPayment = $orderData['total_payment'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/colors/color-1.css">
     <title>Admin Dashboard - E-commerce</title>
     <style>
+
         /* Các style đã được định nghĩa trước đó */
         .dashboard {
             margin-bottom: 2rem;
@@ -36,6 +38,7 @@ $totalPayment = $orderData['total_payment'];
             display: flex;
             gap: 2rem;
         }
+
 
         .card {
             background: var(--container-color);
@@ -202,13 +205,19 @@ $totalPayment = $orderData['total_payment'];
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header_container">
-            <h1>Quản trị viên</h1>
-            <div class="header_btns">
+    <header class="header" id="header">
+        <nav class="nav container">
+            <a href="index.php" class="nav_logo">
+
+                 <img src="assets/img/logo/Remove-bg.ai_1722440725057.png" alt="">
+            </a>
+            <div class="nav_menu" id="nav-menu">
+                <h1>Quản trị viên</h1>
+            </div>
+            <div class="nav_btns">
                 <a href="logout.php" class="button">Đăng xuất</a>
             </div>
-        </div>
+        </nav>
     </header>
 
     <main class="main">

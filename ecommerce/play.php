@@ -1,4 +1,35 @@
+<?php
+include 'connectdb.php'; // Kết nối cơ sở dữ liệu
+session_start(); // Khởi tạo phiên
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email']; // Nhận email từ form
+    $password = $_POST['password']; // Nhận mật khẩu từ form
+
+    // Kiểm tra thông tin đăng nhập (ví dụ: kiểm tra trong cơ sở dữ liệu)
+    $query = "SELECT * FROM users WHERE email = ?"; // Giả sử bạn có bảng users
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        // Kiểm tra mật khẩu
+        if (password_verify($password, $user['password'])) { // Giả sử mật khẩu được mã hóa
+            $_SESSION['username'] = $user['username']; // Lưu tên người dùng vào phiên
+            header('Location: ' . $_SERVER['PHP_SELF']); // Chuyển hướng về trang hiện tại
+            exit();
+        } else {
+            echo '<p style="color: red;">Mật khẩu không đúng!</p>';
+        }
+    } else {
+        echo '<p style="color: red;">Email không tồn tại!</p>';
+    }
+}
+?>
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -193,27 +224,35 @@
         <i class="bx bx-x login_close" id="login-close"></i>
 
         <h2 class="login_title-center">Đăng nhập</h2>
-        
-        <form action="" class="login_form grid">
-            <div class="login_content">
-                <label for="" class="login_label">Email</label>
-                <input type="email" class="login_input">
-            </div>
-            
-            <div class="login_content">
-                <label for="" class="login_label">Mật khẩu</label>
-                <input type="password" class="login_input">
-            </div>
-            
-            <div>
-                <a href="#" class="button">Đăng Nhập</a>
-            </div>
 
-            <div>
-                <p class="signup">Bạn chưa có tài khoản? <a href="registration.php">Đăng ký</a></p>
-            </div>
-            
-        </form>
+        <?php if (isset($_SESSION['username'])): ?>
+        <!-- Nếu người dùng đã đăng nhập -->
+        <div class="user-info">
+            <p>Xin chào, <?php echo $_SESSION['username']; ?>!</p>
+            <a href="logout.php" class="button">Đăng xuất</a>
+        </div>
+        <?php else: ?>
+            <!-- Nếu người dùng chưa đăng nhập -->
+            <form action="" method="POST" class="login_form grid">
+                <div class="login_content">
+                    <label for="email" class="login_label">Email</label>
+                    <input type="email" class="login_input" name="email" required>
+                </div>
+
+                <div class="login_content">
+                    <label for="password" class="login_label">Mật khẩu</label>
+                    <input type="password" class="login_input" name="password" required>
+                </div>
+
+                <div>
+                    <button type="submit" class="button">Đăng Nhập</button>
+                </div>
+
+                <div>
+                    <p class="signup">Bạn chưa có tài khoản? <a href="registration.php">Đăng ký</a></p>
+                </div>
+            </form>
+        <?php endif; ?>
     </div>
     <!--=============== MAIN ===============-->
     <main class="main">

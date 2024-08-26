@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 25, 2024 at 07:55 PM
+-- Generation Time: Aug 26, 2024 at 07:48 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,7 +40,9 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `title`, `price`, `created_at`, `quantity`) VALUES
-(24, 'Áo Hoodie Cho Chó Dễ Thương', 130.000, '2024-08-25 17:15:55', 1);
+(24, 'Áo Hoodie Cho Chó Dễ Thương', 130.000, '2024-08-25 17:15:55', 1),
+(25, 'Áo Hoodie Cho Chó Dễ Thương', 130.000, '2024-08-25 18:00:41', 1),
+(26, 'Áo Hoodie Cho Chó Dễ Thương', 130.000, '2024-08-26 03:24:58', 1);
 
 -- --------------------------------------------------------
 
@@ -101,19 +103,18 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('user','admin') DEFAULT 'user'
+  `role` enum('user','admin') DEFAULT 'user',
+  `email` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
-(1, 'admin', '$2y$10$4z5p5FywlwACKXVQEeY6t.171Uq24gL5BVu9ahMurUpWaK84K4FPu', 'admin'),
-(4, 'phapdang', '$2y$10$894HFOLowYmcBK92QCMGI.n4y/aFh4D0BKKS8MjomO2sGfd/qrI8K', 'user'),
-(5, 'XuanDieu', '$2y$10$wRGeAnyfMBQFSF0ODEUEi.1zuNFrA8X0oQJg8/uY1g4jG7V4v77iq', 'user'),
-(6, 'MinhQuan', '$2y$10$usOAEQpSSE1xwVhPXhVGWuYlbbVTaC3XWcWYtPu9rdPL4kwHvz5n6', 'user'),
-(7, 'adminuser', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'user');
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`) VALUES
+(1, 'admin', '$2y$10$4z5p5FywlwACKXVQEeY6t.171Uq24gL5BVu9ahMurUpWaK84K4FPu', 'admin', 'admin@example.com'),
+(2, 'phapdang', '$2y$10$894HFOLowYmcBK92QCMGI.n4y/aFh4D0BKKS8MjomO2sGfd/qrI8K', 'user', 'phapdang@example.com'),
+(3, 'XuanDieu', '$2y$10$wRGeAnyfMBQFSF0ODEUEi.1zuNFrA8X0oQJg8/uY1g4jG7V4v77iq', 'user', 'XuanDieu@example.com');
 
 --
 -- Indexes for dumped tables
@@ -146,7 +147,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `products`
