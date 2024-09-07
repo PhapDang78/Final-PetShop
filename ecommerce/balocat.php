@@ -302,123 +302,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
 
                 <div class="shop_items grid">
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/slide-3.png" alt="" class="shop_img">
-                        <h3 class="shop_title">Ba lô phi hành gia</h3>
-                        <span class="shop_subtitle">Chất liệu "Da"</span>
+                    <?php
+                    // Truy vấn để lấy sản phẩm cụ thể
+                    $productIds = [1, 17, 18, 19]; // ID của các sản phẩm bạn muốn lấy
+                    $ids = implode(',', $productIds);
+                    $query = "SELECT * FROM products WHERE id IN ($ids)";
+                    $result = $conn->query($query);
 
-                        <div class="sgop_prices">
-                            <span class="shop_price">200,000 VNĐ</span>
-                            <span class="shop_discounts">400,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=1" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=1" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">Sales</div>
-                        <img src="assets/img/balo-1.png" alt="" class="shop_img">
-                        <h3 class="shop_title">LOFFE Kucing Backpack</h3>
-                        <span class="shop_subtitle">Nhựa</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">395,000 VNĐ</span>
-                            <span class="shop_discounts">599,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=17" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=17" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-                    
-                    <div class="shop_content">
-                        <div class="shop_tag">Sales</div>
-                        <img src="assets/img/balo-2.png" alt="" class="shop_img">
-                        <h3 class="shop_title">LOFFE Supreme</h3>
-                        <span class="shop_subtitle">Nhựa</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">395,000 VNĐ</span>
-                            <span class="shop_discounts">599,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=18" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=18" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">Sales</div>
-                        <img src="assets/img/balo-3.png" alt="" class="shop_img">
-                        <h3 class="shop_title">LeShang LS006</h3>
-                        <span class="shop_subtitle">Vải</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">150,000 VNĐ</span>
-                            <span class="shop_discounts">200,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=19" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=19" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <!-- <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/imghavebg/chuongcho5.jpg" alt="" class="shop_img">
-                        <h3 class="shop_title">Nhà chó mini</h3>
-                        <span class="shop_subtitle">Accessory</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price"></span>
-                            <span class="shop_discounts"></span>
-                            
-                        </div>
-
-                        <a href="details.php" class="button shop_button">
-                            <i class="bx bx-cart-alt shop_icon"></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">sale</div>
-                        <img src="assets/img/imghavebg/chuongcho6.jpg   " alt="" class="shop_img">
-                        <h3 class="shop_title">Chuồng chó kẽm</h3>
-                        <span class="shop_subtitle">Accessory</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price"></span>
-                            <span class="shop_discounts"></span>
-                            
-                        </div>
-
-                        <a href="details.php" class="button shop_button">
-                            <i class="bx bx-cart-alt shop_icon"></i>
-                        </a>
-                    </div> -->
+                    if ($result->num_rows > 0) {
+                        while ($product = $result->fetch_assoc()) {
+                            echo '<div class="shop_content">';
+                            echo '<div class="shop_tag">New</div>';
+                            echo '<img src="' . $product['img'] . '" alt="" class="shop_img">';
+                            echo '<h3 class="shop_title">' . $product['name'] . '</h3>';
+                            echo '<span class="shop_subtitle">' . $product['subtitle'] . '</span>';
+                            echo '<div class="sgop_prices">';
+                            echo '<span class="shop_price">' . number_format($product['price'], 0, ',', '.') . ' VNĐ</span>';
+                            if ($product['discount_price']) {
+                                echo '<span class="shop_discounts">' . number_format($product['discount_price'], 0, ',', '.') . ' VNĐ</span>';
+                            }
+                            echo '</div>';
+                            echo '<a href="details.php?id=' . $product['id'] . '" class="button shop_button-cart"> <i class="bx bx-cart-alt shop_icon-cart"></i></a>';
+                            echo '<a href="details.php?id=' . $product['id'] . '" class="button shop_button-show"> <i class="bx bxs-show shop_icon-show"></i></a>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<p>Không có sản phẩm nào.</p>';
+                    }
+                    ?>
                 </div>
             </div>
         </section>

@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h3>Địa chỉ nhận hàng</h3>
             <input type="text" id="full-name" placeholder="Họ và tên người nhận" required>
             <input type="text" id="address" placeholder="Nhập địa chỉ nhận hàng" required>
-            <input type="text" id="phone" placeholder="Nhập số điện thoại" required>
+            <input type="text" id="phone" placeholder="Nhập số điện thoại" required pattern="\d{10,11}" title="Vui lòng nhập số điện thoại hợp lệ (10-11 chữ số)">
         </div>
 
         <h3>Tổng sản phẩm: <span id="item-count">0</span></h3>
@@ -346,46 +346,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
    // Xử lý sự kiện cho nút thanh toán
-checkoutButton.addEventListener('click', function() {
-    const fullName = document.getElementById('full-name').value.trim();
-    const address = document.getElementById('address').value.trim();
-    const phone = document.getElementById('phone').value.trim();
+    checkoutButton.addEventListener('click', function() {
+        const fullName = document.getElementById('full-name').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const phone = document.getElementById('phone').value.trim();
 
-    // Kiểm tra xem các trường địa chỉ có được nhập hay không
-    if (!fullName || !address || !phone) {
-        alert('Vui lòng nhập đầy đủ thông tin địa chỉ nhận hàng.');
-        return;
-    }
-
-    if (cart.length === 0) {
-        alert('Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm trước khi thanh toán.');
-        return;
-    }
-
-    console.log(cart);
-    // Gửi thông tin giỏ hàng đến server
-    fetch('process_checkout.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(cart),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Có lỗi xảy ra trong quá trình thanh toán.');
+        // Kiểm tra xem các trường địa chỉ có được nhập hay không
+        if (!fullName || !address || !phone) {
+            alert('Vui lòng nhập đầy đủ thông tin địa chỉ nhận hàng.');
+            return;
         }
-        return response.json();
-    })
-    .then(data => {
-        alert('Thanh toán thành công!'); // Hoặc xử lý theo phản hồi từ server
-        localStorage.removeItem('cart'); // Xóa giỏ hàng sau khi thanh toán
-        location.reload(); // Tải lại trang để cập nhật giỏ hàng
-    })
-    .catch(error => {
-        alert(`Lỗi: ${error.message}`);
+
+        if (cart.length === 0) {
+            alert('Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm trước khi thanh toán.');
+            return;
+        }
+
+        // Tạo đối tượng dữ liệu để gửi
+        const orderData = {
+            cart: cart,
+            fullName: fullName,
+            address: address,
+            phone: phone
+        };
+
+        // Gửi thông tin giỏ hàng và thông tin người dùng đến server
+        fetch('process_checkout.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData), // Gửi dữ liệu đã tạo
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Có lỗi xảy ra trong quá trình thanh toán.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Thanh toán thành công!'); // Hoặc xử lý theo phản hồi từ server
+            localStorage.removeItem('cart'); // Xóa giỏ hàng sau khi thanh toán
+            location.reload(); // Tải lại trang để cập nhật giỏ hàng
+        })
+        .catch(error => {
+            alert(`Lỗi: ${error.message}`);
+        });
     });
-});
+
 
 
     // Render giỏ hàng khi trang được tải

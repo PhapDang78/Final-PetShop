@@ -302,123 +302,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
 
                 <div class="shop_items grid">
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/slide-1.png" alt="" class="shop_img">
-                        <h3 class="shop_title">Royal canin kitten 36 - 1kg</h3>
-                        <span class="shop_subtitle">Food</span>
+                    <?php
+                    // Truy vấn để lấy sản phẩm cụ thể
+                    $productIds = [3, 24, 25, 26]; // ID của các sản phẩm bạn muốn lấy
+                    $ids = implode(',', $productIds);
+                    $query = "SELECT * FROM products WHERE id IN ($ids)";
+                    $result = $conn->query($query);
 
-                        <div class="sgop_prices">
-                            <span class="shop_price">160,000 VNĐ</span>
-                            <span class="shop_discounts">320,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=3" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=3" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/foodcat-1.png" alt="" class="shop_img">
-                        <h3 class="shop_title"> Whiskas Adult Ocean Fish</h3>
-                        <span class="shop_subtitle">Food</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">115,000 VNĐ</span>
-                            <span class="shop_discounts">160,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=24" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=24" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/foodcat-2.png" alt="" class="shop_img">
-                        <h3 class="shop_title">CATIDEA Fairy Chef British Shorthair</h3>
-                        <span class="shop_subtitle">Food</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">200,000 VNĐ</span>
-                            <span class="shop_discounts">315,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=25" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=25" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/foodcat-3.png" alt="" class="shop_img">
-                        <h3 class="shop_title">CATIDEA Basic Meat Freeze Dried</h3>
-                        <span class="shop_subtitle">Food</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">430,000 VNĐ</span>
-                            <span class="shop_discounts">580,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=26" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=26" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <!-- <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/imghavebg/chuongcho5.jpg" alt="" class="shop_img">
-                        <h3 class="shop_title">Nhà chó mini</h3>
-                        <span class="shop_subtitle">Accessory</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price"></span>
-                            <span class="shop_discounts"></span>
-                            
-                        </div>
-
-                        <a href="details.php" class="button shop_button">
-                            <i class="bx bx-cart-alt shop_icon"></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">sale</div>
-                        <img src="assets/img/imghavebg/chuongcho6.jpg   " alt="" class="shop_img">
-                        <h3 class="shop_title">Chuồng chó kẽm</h3>
-                        <span class="shop_subtitle">Accessory</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price"></span>
-                            <span class="shop_discounts"></span>
-                            
-                        </div>
-
-                        <a href="details.php" class="button shop_button">
-                            <i class="bx bx-cart-alt shop_icon"></i>
-                        </a>
-                    </div> -->
+                    if ($result->num_rows > 0) {
+                        while ($product = $result->fetch_assoc()) {
+                            echo '<div class="shop_content">';
+                            echo '<div class="shop_tag">New</div>';
+                            echo '<img src="' . $product['img'] . '" alt="" class="shop_img">';
+                            echo '<h3 class="shop_title">' . $product['name'] . '</h3>';
+                            echo '<span class="shop_subtitle">' . $product['subtitle'] . '</span>';
+                            echo '<div class="sgop_prices">';
+                            echo '<span class="shop_price">' . number_format($product['price'], 0, ',', '.') . ' VNĐ</span>';
+                            if ($product['discount_price']) {
+                                echo '<span class="shop_discounts">' . number_format($product['discount_price'], 0, ',', '.') . ' VNĐ</span>';
+                            }
+                            echo '</div>';
+                            echo '<a href="details.php?id=' . $product['id'] . '" class="button shop_button-cart"> <i class="bx bx-cart-alt shop_icon-cart"></i></a>';
+                            echo '<a href="details.php?id=' . $product['id'] . '" class="button shop_button-show"> <i class="bx bxs-show shop_icon-show"></i></a>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<p>Không có sản phẩm nào.</p>';
+                    }
+                    ?>
                 </div>
             </div>
         </section>
