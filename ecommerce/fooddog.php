@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Email không tồn tại!'; // Lưu thông báo lỗi
     }
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -302,123 +304,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
 
                 <div class="shop_items grid">
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/fooddog-1.png" alt="" class="shop_img">
-                        <h3 class="shop_title">Thức ăn hạt Dog Mania Premium</h3>
-                        <span class="shop_subtitle">Food</span>
+                    <?php
+                    // Truy vấn để lấy sản phẩm cụ thể
+                    $query = "SELECT * FROM products WHERE category = 'thức ăn cho chó'"; // Giả sử bạn có cột 'category' trong bảng products
+                    $result = $conn->query($query);
 
-                        <div class="sgop_prices">
-                            <span class="shop_price">348,000 VNĐ</span>
-                            <span class="shop_discounts">510,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=14" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=14" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/fooddog-2.png" alt="" class="shop_img">
-                        <h3 class="shop_title">Đồ Ăn Cho Chó Vị Thịt Bò Và Rau Củ Pedigree (3Kg)</h3>
-                        <span class="shop_subtitle">Food</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">170,000 VNĐ</span>
-                            <span class="shop_discounts">300,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=15" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=15" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/fooddog-3.png" alt="" class="shop_img">
-                        <h3 class="shop_title">DOG MANIA Premium Puppy vị hỗn hợp</h3>
-                        <span class="shop_subtitle">Food</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">120,000 VNĐ</span>
-                            <span class="shop_discounts">220,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=16" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=16" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/slide-2.png" alt="" class="shop_img">
-                        <h3 class="shop_title">ROYAL CANIN Mini Puppy 800g</h3>
-                        <span class="shop_subtitle">Food</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">180,000 VNĐ</span>
-                            <span class="shop_discounts">360,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=2" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=2" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <!-- <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/imghavebg/chuongcho5.jpg" alt="" class="shop_img">
-                        <h3 class="shop_title">Nhà chó mini</h3>
-                        <span class="shop_subtitle">Accessory</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price"></span>
-                            <span class="shop_discounts"></span>
-                            
-                        </div>
-
-                        <a href="details.php" class="button shop_button">
-                            <i class="bx bx-cart-alt shop_icon"></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">sale</div>
-                        <img src="assets/img/imghavebg/chuongcho6.jpg   " alt="" class="shop_img">
-                        <h3 class="shop_title">Chuồng chó kẽm</h3>
-                        <span class="shop_subtitle">Accessory</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price"></span>
-                            <span class="shop_discounts"></span>
-                            
-                        </div>
-
-                        <a href="details.php" class="button shop_button">
-                            <i class="bx bx-cart-alt shop_icon"></i>
-                        </a>
-                    </div> -->
+                    if ($result->num_rows > 0) {
+                        while ($product = $result->fetch_assoc()) {
+                            echo '<div class="shop_content">';
+                            echo '<div class="shop_tag">New</div>';
+                            echo '<img src="' . $product['img'] . '" alt="" class="shop_img">';
+                            echo '<h3 class="shop_title">' . $product['name'] . '</h3>';
+                            echo '<span class="shop_subtitle">' . $product['subtitle'] . '</span>';
+                            echo '<div class="sgop_prices">';
+                            echo '<span class="shop_price">' . number_format($product['price'], 0, ',', '.') . ' VNĐ</span>';
+                            if ($product['discount_price']) {
+                                echo '<span class="shop_discounts">' . number_format($product['discount_price'], 0, ',', '.') . ' VNĐ</span>';
+                            }
+                            echo '</div>';
+                            echo '<a href="details.php?id=' . $product['id'] . '" class="button shop_button-cart"> <i class="bx bx-cart-alt shop_icon-cart"></i></a>';
+                            echo '<a href="details.php?id=' . $product['id'] . '" class="button shop_button-show"> <i class="bx bxs-show shop_icon-show"></i></a>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<p>Không có sản phẩm nào.</p>';
+                    }
+                    ?>
                 </div>
             </div>
         </section>

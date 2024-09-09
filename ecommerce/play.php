@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Email không tồn tại!'; // Lưu thông báo lỗi
     }
 }
+
+
 ?>
 <!DOCTYPE html>
 
@@ -303,123 +305,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
 
                 <div class="shop_items grid">
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/dochoi-1.png" alt="" class="shop_img">
-                        <h3 class="shop_title">Lược Chải Lông Cho Chó Mèo</h3>
-                        <span class="shop_subtitle">Nhựa</span>
+                    <?php
+                    // Truy vấn để lấy sản phẩm cụ thể
+                    $query = "SELECT * FROM products WHERE category = 'đồ chơi'"; // Giả sử bạn có cột 'category' trong bảng products
+                    $result = $conn->query($query);
 
-                        <div class="sgop_prices">
-                            <span class="shop_price">8,000 VNĐ</span>
-                            <span class="shop_discounts">26,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=20" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=20" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/dochoi-2.png" alt="" class="shop_img">
-                        <h3 class="shop_title">Đồ Chơi Banh Cao Su Cho Chó Mèo</h3>
-                        <span class="shop_subtitle">Cao Su</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">42,000 VNĐ</span>
-                            <span class="shop_discounts">50,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=21" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=21" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-                    
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/dochoi-3.png" alt="" class="shop_img">
-                        <h3 class="shop_title">Giường Chó Mèo Zerti</h3>
-                        <span class="shop_subtitle">Bông</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">266,000 VNĐ</span>
-                            <span class="shop_discounts">380,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=22" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=22" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-                    
-                    <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/dochoi-4.png" alt="" class="shop_img">
-                        <h3 class="shop_title">Trò chơi thú cưng cho mèo ăn chậm và đồ chơi khay thức ăn cho chó</h3>
-                        <span class="shop_subtitle">Nhựa</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price">179,000 VNĐ</span>
-                            <span class="shop_discounts">260,000 VNĐ</span>
-                            
-                        </div>
-
-                        <a href="details.php?id=23" class="button shop_button-cart"> 
-                            <i class="bx bx-cart-alt shop_icon-cart"></i>
-                           
-                        </a>
-                        <a href="details.php?id=23" class="button shop_button-show"> 
-                            <i class='bx bxs-show shop_icon-show'></i>
-                        </a>
-                    </div>
-
-                    <!-- <div class="shop_content">
-                        <div class="shop_tag">New</div>
-                        <img src="assets/img/imghavebg/chuongcho5.jpg" alt="" class="shop_img">
-                        <h3 class="shop_title">Nhà chó mini</h3>
-                        <span class="shop_subtitle">Accessory</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price"></span>
-                            <span class="shop_discounts"></span>
-                            
-                        </div>
-
-                        <a href="details.php" class="button shop_button">
-                            <i class="bx bx-cart-alt shop_icon"></i>
-                        </a>
-                    </div>
-
-                    <div class="shop_content">
-                        <div class="shop_tag">sale</div>
-                        <img src="assets/img/imghavebg/chuongcho6.jpg   " alt="" class="shop_img">
-                        <h3 class="shop_title">Chuồng chó kẽm</h3>
-                        <span class="shop_subtitle">Accessory</span>
-
-                        <div class="sgop_prices">
-                            <span class="shop_price"></span>
-                            <span class="shop_discounts"></span>
-                            
-                        </div>
-
-                        <a href="details.php" class="button shop_button">
-                            <i class="bx bx-cart-alt shop_icon"></i>
-                        </a>
-                    </div> -->
+                    if ($result->num_rows > 0) {
+                        while ($product = $result->fetch_assoc()) {
+                            echo '<div class="shop_content">';
+                            echo '<div class="shop_tag">New</div>';
+                            echo '<img src="' . $product['img'] . '" alt="" class="shop_img">';
+                            echo '<h3 class="shop_title">' . $product['name'] . '</h3>';
+                            echo '<span class="shop_subtitle">' . $product['subtitle'] . '</span>';
+                            echo '<div class="sgop_prices">';
+                            echo '<span class="shop_price">' . number_format($product['price'], 0, ',', '.') . ' VNĐ</span>';
+                            if ($product['discount_price']) {
+                                echo '<span class="shop_discounts">' . number_format($product['discount_price'], 0, ',', '.') . ' VNĐ</span>';
+                            }
+                            echo '</div>';
+                            echo '<a href="details.php?id=' . $product['id'] . '" class="button shop_button-cart"> <i class="bx bx-cart-alt shop_icon-cart"></i></a>';
+                            echo '<a href="details.php?id=' . $product['id'] . '" class="button shop_button-show"> <i class="bx bxs-show shop_icon-show"></i></a>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<p>Không có sản phẩm nào.</p>';
+                    }
+                    ?>
                 </div>
             </div>
 

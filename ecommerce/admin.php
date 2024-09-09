@@ -15,6 +15,10 @@ $orderData = mysqli_fetch_assoc($orderCountResult);
 
 $orderCount = $orderData['order_count'];
 $totalPayment = $orderData['total_payment'];
+
+// Lấy thông tin đơn hàng và khách hàng
+$orderQuery = "SELECT * FROM orders";
+$orderResult = mysqli_query($conn, $orderQuery);
 ?>
 
 <!DOCTYPE html>
@@ -28,8 +32,24 @@ $totalPayment = $orderData['total_payment'];
     <link rel="stylesheet" href="assets/css/colors/color-1.css">
     <title>Admin Dashboard - E-commerce</title>
     <style>
+            /*=============== GLOBAL STYLES ===============*/
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--body-color);
+            color: var(--text-color);
+        }
 
-        /* Các style đã được định nghĩa trước đó */
+        header {
+            background: var(--container-color);
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        h2.section_title {
+            color: var(--title-color);
+            margin-bottom: var(--mb-2);
+        }
+
+        /*=============== DASHBOARD STYLES ===============*/
         .dashboard {
             margin-bottom: 2rem;
         }
@@ -39,7 +59,6 @@ $totalPayment = $orderData['total_payment'];
             gap: 2rem;
         }
 
-
         .card {
             background: var(--container-color);
             padding: 1.5rem;
@@ -47,41 +66,51 @@ $totalPayment = $orderData['total_payment'];
             box-shadow: var(--shadow);
             flex: 1;
             text-align: center;
+            transition: transform 0.3s;
         }
 
-        .products.section {
+        .card:hover {
+            transform: translateY(-5px); /* Hiệu ứng nâng lên khi hover */
+        }
+
+        /*=============== TABLE STYLES ===============*/
+        .products.section, .orders.section {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .products_table {
+        .products_table, .orders_table {
             width: 80%;
             border-collapse: collapse;
             margin-top: 1rem;
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ẩn viền ngoài */
         }
 
-        .product-table th, .product-table td {
+        .products_table th, .products_table td,
+        .orders_table th, .orders_table td {
             padding: 1rem;
             border: 1px solid #ddd;
             text-align: center;
-        }   
-
-        .product-table th {
-            background-color: var(--container-color);
-            color: var(--title-color);
         }
 
-        .product-table tr:nth-child(even) {
+        .products_table th, .orders_table th {
+            background-color: var(--first-color);
+            color: white; /* Màu chữ tiêu đề bảng */
+        }
+
+        .products_table tr:nth-child(even), .orders_table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
 
-        .product-table tr:hover {
+        .products_table tr:hover, .orders_table tr:hover {
             background-color: #f1f1f1;
         }
 
+        /*=============== BUTTON STYLES ===============*/
         .add-product-btn {
-            background-color: hsl(250, 60%, 50%);
+            background-color: var(--first-color);
             color: #fff;
             padding: 0.75rem 1.5rem;
             border: none;
@@ -93,53 +122,8 @@ $totalPayment = $orderData['total_payment'];
         .add-product-btn:hover {
             background-color: hsl(250, 60%, 40%);
         }
-        .product-card {
-            background: var(--container-color);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 1rem;
-        }
 
-        .product-card h3 {
-            font-size: var(--h2-font-size);
-            color: var(--title-color);
-        }
-
-        .product-card p {
-            color: var(--text-color);
-        }
-
-        .product-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-        }
-
-        .edit-btn, .delete-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 0.25rem;
-            cursor: pointer;
-        }
-
-        .edit-btn {
-            background-color: hsl(60, 100%, 40%);
-            color: #fff;
-        }
-
-        .delete-btn {
-            background-color: hsl(0, 100%, 50%);
-            color: #fff;
-        }
-
-        .edit-btn:hover {
-            background-color: hsl(60, 100%, 30%);
-        }
-
-        .delete-btn:hover {
-            background-color: hsl(0, 100%, 40%);
-        }
+        /*=============== FORM STYLES ===============*/
         #add-product-form {
             margin-top: 1rem;
             display: none; /* Ẩn form mặc định */
@@ -165,7 +149,8 @@ $totalPayment = $orderData['total_payment'];
             color: #555; /* Màu sắc của label */
         }
 
-        #add-product-form input {
+        #add-product-form input,
+        #add-product-form select {
             display: block;
             margin: 0.5rem 0 1rem; /* Khoảng cách trên và dưới */
             padding: 0.5rem;
@@ -185,7 +170,7 @@ $totalPayment = $orderData['total_payment'];
         }
 
         #save-product-btn {
-            background-color: hsl(250, 60%, 50%); /* Màu nền cho nút lưu */
+            background-color: var(--first-color);
             color: #fff; /* Màu chữ */
         }
 
@@ -202,14 +187,21 @@ $totalPayment = $orderData['total_payment'];
             background-color: #c0392b; /* Màu nền khi hover */
         }
 
+        /*=============== FOOTER STYLES ===============*/
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--first-color);
+            color: white; /* Màu chữ footer */
+        }
+
     </style>
 </head>
 <body>
     <header class="header" id="header">
         <nav class="nav container">
             <a href="index.php" class="nav_logo">
-
-                 <img src="assets/img/logo/Remove-bg.ai_1722440725057.png" alt="">
+                <img src="assets/img/logo/Remove-bg.ai_1722440725057.png" alt="">
             </a>
             <div class="nav_menu" id="nav-menu">
                 <h1>Quản trị viên</h1>
@@ -222,26 +214,11 @@ $totalPayment = $orderData['total_payment'];
 
     <main class="main">
         <section class="dashboard section">
-            <h2 class="section_title">Bảng điều khiển</h2>
+            <h2 class="section_title">Doanh Thu</h2>
             <div class="dashboard_cards">
-                <!-- <div class="card">
-                    <h3>Khách hàng</h3>
-                    <span id="customer-count">0</span>
-                </div> -->
-
                 <div class="card">
                     <h3>Đơn hàng</h3>
                     <span id="order-count"><?php echo $orderCount; ?></span>
-                    <?php
-                    $query = "SELECT * FROM orders";
-                    $result = mysqli_query($conn, $query);
-                    
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<div class='product-card'>";
-                        echo "<p>" . $row['title'] . "</p>";
-                        echo "</div>";
-                    }
-                    ?>
                 </div>
                 
                 <div class="card">
@@ -260,6 +237,18 @@ $totalPayment = $orderData['total_payment'];
                 <input type="text" id="product-name" required>
                 <label for="product-price">Giá sản phẩm:</label>
                 <input type="number" id="product-price" required>
+                <label for="product-category">Phân loại sản phẩm:</label>
+                <select id="product-category" required>
+                    <option value="">Chọn phân loại</option>
+                    <option value="balo">Balo</option>
+                    <option value="quần áo">Quần áo</option>
+                    <option value="chuồng chó">Chuồng chó</option>
+                    <option value="thức ăn cho chó">Thức ăn cho chó</option>
+                    <option value="thức ăn cho mèo">Thức ăn cho mèo</option>
+                    <option value="đồ chơi">Đồ chơi</option>
+                </select>
+                <label for="product-image">Hình ảnh sản phẩm:</label>
+                <input type="file" id="product-image" accept="image/*" required>
                 <button id="save-product-btn">Lưu sản phẩm</button>
                 <button id="cancel-btn">Hủy</button>
             </div>
@@ -267,9 +256,11 @@ $totalPayment = $orderData['total_payment'];
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Tên sản phẩm</th>
+                        <th>Tên Sản Phẩm</th>
                         <th>Giá</th>
-                        <th>Hành động</th>
+                        <th>Loại Sản Phẩm</th>
+                        <th>Chỉnh Sửa</th>
+                        <th>Xóa</th>
                     </tr>
                 </thead>
                 <tbody id="product-list">
@@ -277,16 +268,56 @@ $totalPayment = $orderData['total_payment'];
                     // Lấy danh sách sản phẩm từ cơ sở dữ liệu
                     $query = "SELECT * FROM products";
                     $result = mysqli_query($conn, $query);
-
+                    
+                    if (!$result) {
+                        die("Lỗi truy vấn: " . mysqli_error($conn));
+                    }
                     while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
+                        echo "<tr data-id='" . $row['id'] . "'>";
                         echo "<td>" . $row['id'] . "</td>";
                         echo "<td>" . $row['name'] . "</td>";
-                        echo "<td>" . number_format($row['price'], 0, ',', '.') . " VNĐ</td>";
+                        echo "<td>" . number_format($row['price'], 0, '.', '.') . " VNĐ</td>";
+                        echo "<td>" . htmlspecialchars($row['category']) . "</td>"; // Hiển thị phân loại
                         echo "<td class='product-actions'>";
                         echo "<button class='edit-btn' onclick='editProduct(" . $row['id'] . ")'>Chỉnh Sửa</button>";
+                        echo "</td>";
+                        echo "<td class='product-actions'>";
                         echo "<button class='delete-btn' onclick='deleteProduct(" . $row['id'] . ")'>Xóa</button>";
                         echo "</td>";
+                        echo "</tr>";
+                    }
+                    
+                    ?>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="orders section">
+            <h2 class="section_title">Danh sách đơn hàng</h2>
+            <table class="orders_table">
+                <thead>
+                    <tr>
+                        <th>ID Đơn Hàng</th>
+                        <th>Tên Khách Hàng</th>
+                        <th>Địa Chỉ</th>
+                        <th>Số Điện Thoại</th>
+                        <th>Mặt Hàng</th>
+                        <th>Số Lượng</th>
+                        <th>Tổng Giá</th>
+                    </tr>
+                </thead>
+                <tbody id="order-list">
+                    <?php
+                    // Hiển thị danh sách đơn hàng
+                    while ($order = mysqli_fetch_assoc($orderResult)) {
+                        echo "<tr>";
+                        echo "<td>" . $order['id'] . "</td>";
+                        echo "<td>" . htmlspecialchars($order['full_name']) . "</td>";
+                        echo "<td>" . htmlspecialchars($order['address']) . "</td>";
+                        echo "<td>" . htmlspecialchars($order['phone']) . "</td>";
+                        echo "<td>" . htmlspecialchars($order['title']) . "</td>";
+                        echo "<td>" . htmlspecialchars($order['quantity']) . "</td>";
+                        echo "<td>" . number_format($order['price'] * $order['quantity'], 3, '.', '.') . " VNĐ</td>";
                         echo "</tr>";
                     }
                     ?>
@@ -300,7 +331,7 @@ $totalPayment = $orderData['total_payment'];
     </footer>
 
     <script>
-          const productList = document.getElementById('product-list');
+        const productList = document.getElementById('product-list');
         const addProductForm = document.getElementById('add-product-form');
         const saveProductBtn = document.getElementById('save-product-btn');
         const cancelBtn = document.getElementById('cancel-btn');
@@ -314,32 +345,44 @@ $totalPayment = $orderData['total_payment'];
         saveProductBtn.onclick = function() {
             const newName = document.getElementById('product-name').value;
             const newPrice = document.getElementById('product-price').value;
+            const newImage = document.getElementById('product-image').files[0];
+            const newCategory = document.getElementById('product-category').value;
 
-            if (newName && newPrice) {
+            if (newName && newPrice && newImage && newCategory) {
+                const formData = new FormData();
+                formData.append('name', newName);
+                formData.append('price', newPrice);
+                formData.append('image', newImage);
+                formData.append('category', newCategory); // Thêm phân loại vào FormData
+
                 fetch('add_product.php', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `name=${encodeURIComponent(newName)}&price=${encodeURIComponent(newPrice)}`
+                    body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
                         // Thêm sản phẩm vào danh sách
                         const newRow = productList.insertRow();
+                        newRow.setAttribute('data-id', data.id);
                         newRow.innerHTML = `
                             <td>${data.id}</td>
                             <td>${newName}</td>
                             <td>${newPrice} VNĐ</td>
+                            <td>${newCategory}</td> <!-- Hiển thị phân loại -->
                             <td class='product-actions'>
                                 <button class='edit-btn' onclick='editProduct(${data.id})'>Chỉnh Sửa</button>
+                            </td>
+                            <td class='product-actions'>
                                 <button class='delete-btn' onclick='deleteProduct(${data.id})'>Xóa</button>
                             </td>
                         `;
-                        addProductForm.style.display = 'none'; // Ẩn form
-                        document.getElementById('product-name').value = ''; // Xóa dữ liệu form
+                        // Reset form
+                        addProductForm.style.display = 'none';
+                        document.getElementById('product-name').value = '';
                         document.getElementById('product-price').value = '';
+                        document.getElementById('product-image').value = '';
+                        document.getElementById('product-category').value = ''; 
                     } else {
                         alert('Thêm sản phẩm không thành công!');
                     }
@@ -354,7 +397,7 @@ $totalPayment = $orderData['total_payment'];
 
         // Chức năng chỉnh sửa sản phẩm
         function editProduct(id) {
-            const row = productList.querySelector(`tr:nth-child(${id})`);
+            const row = productList.querySelector(`tr[data-id='${id}']`);
             const name = row.cells[1].innerText;
             const price = row.cells[2].innerText.replace(' VNĐ', '');
 
@@ -396,8 +439,11 @@ $totalPayment = $orderData['total_payment'];
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        const row = productList.querySelector(`tr:nth-child(${id})`);
-                        productList.removeChild(row);
+                        // Xóa sản phẩm khỏi giao diện người dùng
+                        const row = productList.querySelector(`tr[data-id='${id}']`);
+                        if (row) {
+                            row.remove();
+                        }
                     } else {
                         alert('Xóa không thành công!');
                     }
