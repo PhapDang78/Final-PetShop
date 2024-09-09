@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Phân trang
-$limit = 6; // Số sản phẩm trên mỗi trang
+$limit = 4; // Số sản phẩm trên mỗi trang
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Lấy trang hiện tại
 $offset = ($page - 1) * $limit; // Tính toán offset
 
@@ -66,32 +66,34 @@ $result = $stmt->get_result();
 
     <title>Responsive e-commerce website - Crypticalcoder</title>
     <style>
-    .pagination {
-        display: flex;
-        justify-content: flex-end; /* Đẩy phân trang sang bên phải */
-        list-style-type: none;
-        padding: 0;
-        margin-top: 20px; /* Thêm khoảng cách phía trên nếu cần */
-    }
+        .pagination {
+            display: flex;
+            justify-content: flex-end; /* Đẩy phân trang sang bên phải */
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px; /* Thêm khoảng cách phía trên nếu cần */
+        }
 
-    .pagination a {
-        margin: 0 5px;
-        padding: 8px 16px;
-        text-decoration: none;
-        color: #007bff;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s; /* Thêm hiệu ứng chuyển đổi */
+        }
 
-    .pagination a.active {
-        background-color: #007bff;
-        color: white;
-        border: 1px solid #007bff;
-    }
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+        }
 
-    .pagination a:hover:not(.active) {
-        background-color: #ddd;
-    }
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+
     </style>
 </head>
 <body>
@@ -325,19 +327,18 @@ $result = $stmt->get_result();
                         <p>Không có sản phẩm nào.</p>
                     <?php endif; ?>
                 </div>
-
-                <!-- Phân trang -->
-                <div class="pagination">
-                    <?php if ($page > 1): ?>
-                        <a href="?page=<?php echo $page - 1; ?>">Trước</a>
-                    <?php endif; ?>
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <a href="?page=<?php echo $i; ?>" class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
-                    <?php endfor; ?>
-                    <?php if ($page < $totalPages): ?>
-                        <a href="?page=<?php echo $page + 1; ?>">Tiếp theo</a>
-                    <?php endif; ?>
-                </div>
+            </div>
+                        <!-- Phân trang -->
+            <div class="pagination">
+                <?php if ($page > 1): ?>
+                    <a href="?page=<?php echo $page - 1; ?>">Trước</a>
+                <?php endif; ?>
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a href="?page=<?php echo $i; ?>" class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
+                <?php endfor; ?>
+                <?php if ($page < $totalPages): ?>
+                    <a href="?page=<?php echo $page + 1; ?>">Tiếp theo</a>
+                <?php endif; ?>
             </div>
         </section>
     </main>

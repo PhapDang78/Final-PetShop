@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 26, 2024 at 07:48 AM
+-- Generation Time: Sep 09, 2024 at 06:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,6 +29,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
+  `full_name` varchar(255) NOT NULL,
+  `address` text NOT NULL,
+  `phone` varchar(20) NOT NULL,
   `title` text NOT NULL,
   `price` decimal(10,3) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -39,10 +42,8 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `title`, `price`, `created_at`, `quantity`) VALUES
-(24, 'Áo Hoodie Cho Chó Dễ Thương', 130.000, '2024-08-25 17:15:55', 1),
-(25, 'Áo Hoodie Cho Chó Dễ Thương', 130.000, '2024-08-25 18:00:41', 1),
-(26, 'Áo Hoodie Cho Chó Dễ Thương', 130.000, '2024-08-26 03:24:58', 1);
+INSERT INTO `orders` (`id`, `full_name`, `address`, `phone`, `title`, `price`, `created_at`, `quantity`) VALUES
+(1, 'Đặng', 'Quy', '0131564198', 'Ba lô phi hành gia', 200.000, '2024-09-09 16:01:50', 1);
 
 -- --------------------------------------------------------
 
@@ -114,7 +115,11 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`) VALUES
 (1, 'admin', '$2y$10$4z5p5FywlwACKXVQEeY6t.171Uq24gL5BVu9ahMurUpWaK84K4FPu', 'admin', 'admin@example.com'),
 (2, 'phapdang', '$2y$10$894HFOLowYmcBK92QCMGI.n4y/aFh4D0BKKS8MjomO2sGfd/qrI8K', 'user', 'phapdang@example.com'),
-(3, 'XuanDieu', '$2y$10$wRGeAnyfMBQFSF0ODEUEi.1zuNFrA8X0oQJg8/uY1g4jG7V4v77iq', 'user', 'XuanDieu@example.com');
+(3, 'XuanDieu', '$2y$10$wRGeAnyfMBQFSF0ODEUEi.1zuNFrA8X0oQJg8/uY1g4jG7V4v77iq', 'user', 'XuanDieu@example.com'),
+(9, 'MinhQuan', '$2y$10$dbkO6CT6OAF3qISw6XY2Neg4DUJsz5KGFzSGxVcEBl/jCH/7EpVTa', 'user', 'minhquan@gmail.com'),
+(10, 'HuyNguyen', '$2y$10$TIbzEr.lowHX47LT73I1weXHK6FNdlX9dZQp2U6vS6t3sxZshHexe', 'user', 'huynguyen@gmail.com'),
+(11, 'Huylo', '$2y$10$JOg.XOLD76takK1lCA6Ja.kRRqFiKdX45N20LGBhtAdl4FgLgTeem', 'user', 'huylo@gmail.com'),
+(12, 'Quanlo', '$2y$10$sk9gsAedSdhWKL8ZSEQ4tupjRSk1NeLbWo1ZxRIXpNFEkuaxmjroi', 'user', 'Quanlo@gmail.com');
 
 --
 -- Indexes for dumped tables
@@ -147,19 +152,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

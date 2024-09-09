@@ -12,6 +12,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $price = $_POST['price'];
+    $category = $_POST['category'];
 
     // Xử lý hình ảnh
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -37,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Di chuyển hình ảnh vào thư mục uploads
         if (move_uploaded_file($imageTmpPath, $imagePath)) {
             // Lưu thông tin sản phẩm vào cơ sở dữ liệu
-            $stmt = $conn->prepare("INSERT INTO products (name, price, img) VALUES (?, ?, ?)");
-            $stmt->bind_param("sis", $name, $price, $imagePath);
+            $stmt = $conn->prepare("INSERT INTO products (name, price, img, category) VALUES (?, ?, ?, ?)"); // Thêm category vào truy vấn
+            $stmt->bind_param("siss", $name, $price, $imagePath, $category); // Thêm category vào bind_param
             $stmt->execute();
 
             if ($stmt->affected_rows > 0) {

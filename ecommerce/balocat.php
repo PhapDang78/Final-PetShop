@@ -28,6 +28,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Email không tồn tại!'; // Lưu thông báo lỗi
     }
 }
+
+$limit = 6; // Số sản phẩm trên mỗi trang
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Lấy trang hiện tại
+$offset = ($page - 1) * $limit; // Tính toán offset
+
+// Truy vấn tổng số sản phẩm
+$totalQuery = "SELECT COUNT(*) as total FROM products";
+$totalResult = $conn->query($totalQuery);
+$totalRow = $totalResult->fetch_assoc();
+$totalProducts = $totalRow['total'];
+$totalPages = ceil($totalProducts / $limit); // Tính số trang
+
+// Truy vấn sản phẩm theo trang
+$query = "SELECT * FROM products LIMIT ?, ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("ii", $offset, $limit);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -303,10 +321,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="shop_items grid">
                     <?php
-                    // Truy vấn để lấy sản phẩm cụ thể
-                    $productIds = [1, 17, 18, 19]; // ID của các sản phẩm bạn muốn lấy
-                    $ids = implode(',', $productIds);
-                    $query = "SELECT * FROM products WHERE id IN ($ids)";
+                    // Truy vấn để lấy sản phẩm có phân loại là "balo"
+                    $query = "SELECT * FROM products WHERE category = 'balo'"; // Giả sử bạn có cột 'category' trong bảng products
                     $result = $conn->query($query);
 
                     if ($result->num_rows > 0) {
@@ -329,6 +345,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     } else {
                         echo '<p>Không có sản phẩm nào.</p>';
                     }
+
                     ?>
                 </div>
             </div>

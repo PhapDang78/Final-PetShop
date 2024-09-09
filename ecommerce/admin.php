@@ -32,7 +32,24 @@ $orderResult = mysqli_query($conn, $orderQuery);
     <link rel="stylesheet" href="assets/css/colors/color-1.css">
     <title>Admin Dashboard - E-commerce</title>
     <style>
-        /* Các style đã được định nghĩa trước đó */
+            /*=============== GLOBAL STYLES ===============*/
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--body-color);
+            color: var(--text-color);
+        }
+
+        header {
+            background: var(--container-color);
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        h2.section_title {
+            color: var(--title-color);
+            margin-bottom: var(--mb-2);
+        }
+
+        /*=============== DASHBOARD STYLES ===============*/
         .dashboard {
             margin-bottom: 2rem;
         }
@@ -49,8 +66,14 @@ $orderResult = mysqli_query($conn, $orderQuery);
             box-shadow: var(--shadow);
             flex: 1;
             text-align: center;
+            transition: transform 0.3s;
         }
 
+        .card:hover {
+            transform: translateY(-5px); /* Hiệu ứng nâng lên khi hover */
+        }
+
+        /*=============== TABLE STYLES ===============*/
         .products.section, .orders.section {
             display: flex;
             flex-direction: column;
@@ -61,6 +84,8 @@ $orderResult = mysqli_query($conn, $orderQuery);
             width: 80%;
             border-collapse: collapse;
             margin-top: 1rem;
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ẩn viền ngoài */
         }
 
         .products_table th, .products_table td,
@@ -71,8 +96,8 @@ $orderResult = mysqli_query($conn, $orderQuery);
         }
 
         .products_table th, .orders_table th {
-            background-color: var(--container-color);
-            color: var(--title-color);
+            background-color: var(--first-color);
+            color: white; /* Màu chữ tiêu đề bảng */
         }
 
         .products_table tr:nth-child(even), .orders_table tr:nth-child(even) {
@@ -83,8 +108,9 @@ $orderResult = mysqli_query($conn, $orderQuery);
             background-color: #f1f1f1;
         }
 
+        /*=============== BUTTON STYLES ===============*/
         .add-product-btn {
-            background-color: hsl(250, 60%, 50%);
+            background-color: var(--first-color);
             color: #fff;
             padding: 0.75rem 1.5rem;
             border: none;
@@ -97,6 +123,7 @@ $orderResult = mysqli_query($conn, $orderQuery);
             background-color: hsl(250, 60%, 40%);
         }
 
+        /*=============== FORM STYLES ===============*/
         #add-product-form {
             margin-top: 1rem;
             display: none; /* Ẩn form mặc định */
@@ -122,7 +149,8 @@ $orderResult = mysqli_query($conn, $orderQuery);
             color: #555; /* Màu sắc của label */
         }
 
-        #add-product-form input {
+        #add-product-form input,
+        #add-product-form select {
             display: block;
             margin: 0.5rem 0 1rem; /* Khoảng cách trên và dưới */
             padding: 0.5rem;
@@ -142,7 +170,7 @@ $orderResult = mysqli_query($conn, $orderQuery);
         }
 
         #save-product-btn {
-            background-color: hsl(250, 60%, 50%); /* Màu nền cho nút lưu */
+            background-color: var(--first-color);
             color: #fff; /* Màu chữ */
         }
 
@@ -158,6 +186,15 @@ $orderResult = mysqli_query($conn, $orderQuery);
         #cancel-btn:hover {
             background-color: #c0392b; /* Màu nền khi hover */
         }
+
+        /*=============== FOOTER STYLES ===============*/
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--first-color);
+            color: white; /* Màu chữ footer */
+        }
+
     </style>
 </head>
 <body>
@@ -177,7 +214,7 @@ $orderResult = mysqli_query($conn, $orderQuery);
 
     <main class="main">
         <section class="dashboard section">
-            <h2 class="section_title">Bảng điều khiển</h2>
+            <h2 class="section_title">Doanh Thu</h2>
             <div class="dashboard_cards">
                 <div class="card">
                     <h3>Đơn hàng</h3>
@@ -200,6 +237,16 @@ $orderResult = mysqli_query($conn, $orderQuery);
                 <input type="text" id="product-name" required>
                 <label for="product-price">Giá sản phẩm:</label>
                 <input type="number" id="product-price" required>
+                <label for="product-category">Phân loại sản phẩm:</label>
+                <select id="product-category" required>
+                    <option value="">Chọn phân loại</option>
+                    <option value="balo">Balo</option>
+                    <option value="quần áo">Quần áo</option>
+                    <option value="chuồng chó">Chuồng chó</option>
+                    <option value="thức ăn cho chó">Thức ăn cho chó</option>
+                    <option value="thức ăn cho mèo">Thức ăn cho mèo</option>
+                    <option value="đồ chơi">Đồ chơi</option>
+                </select>
                 <label for="product-image">Hình ảnh sản phẩm:</label>
                 <input type="file" id="product-image" accept="image/*" required>
                 <button id="save-product-btn">Lưu sản phẩm</button>
@@ -209,9 +256,11 @@ $orderResult = mysqli_query($conn, $orderQuery);
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Tên sản phẩm</th>
+                        <th>Tên Sản Phẩm</th>
                         <th>Giá</th>
-                        <th>Hành động</th>
+                        <th>Loại Sản Phẩm</th>
+                        <th>Chỉnh Sửa</th>
+                        <th>Xóa</th>
                     </tr>
                 </thead>
                 <tbody id="product-list">
@@ -219,18 +268,25 @@ $orderResult = mysqli_query($conn, $orderQuery);
                     // Lấy danh sách sản phẩm từ cơ sở dữ liệu
                     $query = "SELECT * FROM products";
                     $result = mysqli_query($conn, $query);
-
+                    
+                    if (!$result) {
+                        die("Lỗi truy vấn: " . mysqli_error($conn));
+                    }
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr data-id='" . $row['id'] . "'>";
                         echo "<td>" . $row['id'] . "</td>";
                         echo "<td>" . $row['name'] . "</td>";
                         echo "<td>" . number_format($row['price'], 0, '.', '.') . " VNĐ</td>";
+                        echo "<td>" . htmlspecialchars($row['category']) . "</td>"; // Hiển thị phân loại
                         echo "<td class='product-actions'>";
                         echo "<button class='edit-btn' onclick='editProduct(" . $row['id'] . ")'>Chỉnh Sửa</button>";
+                        echo "</td>";
+                        echo "<td class='product-actions'>";
                         echo "<button class='delete-btn' onclick='deleteProduct(" . $row['id'] . ")'>Xóa</button>";
                         echo "</td>";
                         echo "</tr>";
                     }
+                    
                     ?>
                 </tbody>
             </table>
@@ -290,12 +346,14 @@ $orderResult = mysqli_query($conn, $orderQuery);
             const newName = document.getElementById('product-name').value;
             const newPrice = document.getElementById('product-price').value;
             const newImage = document.getElementById('product-image').files[0];
+            const newCategory = document.getElementById('product-category').value;
 
-            if (newName && newPrice && newImage) {
+            if (newName && newPrice && newImage && newCategory) {
                 const formData = new FormData();
                 formData.append('name', newName);
                 formData.append('price', newPrice);
                 formData.append('image', newImage);
+                formData.append('category', newCategory); // Thêm phân loại vào FormData
 
                 fetch('add_product.php', {
                     method: 'POST',
@@ -306,20 +364,25 @@ $orderResult = mysqli_query($conn, $orderQuery);
                     if (data.status === 'success') {
                         // Thêm sản phẩm vào danh sách
                         const newRow = productList.insertRow();
-                        newRow.setAttribute('data-id', data.id); // Thêm thuộc tính data-id
+                        newRow.setAttribute('data-id', data.id);
                         newRow.innerHTML = `
                             <td>${data.id}</td>
                             <td>${newName}</td>
                             <td>${newPrice} VNĐ</td>
+                            <td>${newCategory}</td> <!-- Hiển thị phân loại -->
                             <td class='product-actions'>
                                 <button class='edit-btn' onclick='editProduct(${data.id})'>Chỉnh Sửa</button>
+                            </td>
+                            <td class='product-actions'>
                                 <button class='delete-btn' onclick='deleteProduct(${data.id})'>Xóa</button>
                             </td>
                         `;
-                        addProductForm.style.display = 'none'; // Ẩn form
-                        document.getElementById('product-name').value = ''; // Xóa dữ liệu form
+                        // Reset form
+                        addProductForm.style.display = 'none';
+                        document.getElementById('product-name').value = '';
                         document.getElementById('product-price').value = '';
-                        document.getElementById('product-image').value = ''; // Xóa hình ảnh
+                        document.getElementById('product-image').value = '';
+                        document.getElementById('product-category').value = ''; 
                     } else {
                         alert('Thêm sản phẩm không thành công!');
                     }

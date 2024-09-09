@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h3>Địa chỉ nhận hàng</h3>
             <input type="text" id="full-name" placeholder="Họ và tên người nhận" required>
             <input type="text" id="address" placeholder="Nhập địa chỉ nhận hàng" required>
-            <input type="text" id="phone" placeholder="Nhập số điện thoại" required pattern="\d{10,11}" title="Vui lòng nhập số điện thoại hợp lệ (10-11 chữ số)">
+            <input type="tel" id="phone" placeholder="Nhập số điện thoại" required pattern="\d{10,11}" title="Vui lòng nhập số điện thoại hợp lệ (10-11 chữ số)">
         </div>
 
         <h3>Tổng sản phẩm: <span id="item-count">0</span></h3>
@@ -243,162 +243,165 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="assets/js/main.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const cartContainer = document.getElementById('cart-items');
-    const itemCount = document.getElementById('item-count');
-    const totalPrice = document.getElementById('total-price');
-    const checkoutButton = document.getElementById('checkout-button');
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    function renderCart() {
-        cartContainer.innerHTML = '';
-        let total = 0;
-        let totalItems = 0;
-
-        if (cart.length === 0) {
-            cartContainer.innerHTML = '<p>Giỏ hàng của bạn trống.</p>';
-            itemCount.textContent = 0; // Đặt số lượng sản phẩm về 0
-            totalPrice.textContent = '0 VNĐ'; // Đặt tổng giá về 0
-        } else {
-            cart.forEach(item => {
-                total += parseFloat(item.price) * item.quantity;
-                totalItems += item.quantity;
-
-                cartContainer.innerHTML += `
-                    <article class="cart_card">
-                        <div class="cart_box">
-                            <img src="${item.img}" alt="${item.title}" class="cart_img">
-                        </div>
-
-                        <div class="cart_details">
-                            <h3 class="cart_title">${item.title}</h3>
-                            <span class="cart_price">${item.price} VNĐ</span>
-
-                            <div class="cart_amount">
-                                <div class="cart_amount-content">
-                                    <span class="cart_amount-box decrease" data-id="${item.id}">
-                                        <i class="bx bx-minus"></i>
-                                    </span>
-
-                                    <span class="cart_amount-number">${item.quantity}</span>
-
-                                    <span class="cart_amount-box increase" data-id="${item.id}">
-                                        <i class="bx bx-plus"></i>
-                                    </span>
-                                </div>
-
-                                <i class="bx bx-trash-alt cart_amount-trash remove" data-id="${item.id}"></i>
-                            </div>
-                        </div>
-                    </article>
-                `;
-            });
-
-            itemCount.textContent = totalItems;
-            totalPrice.textContent = `${total.toLocaleString()},000 VNĐ`;
-
-            // Thêm sự kiện cho các nút tăng và giảm
-            document.querySelectorAll('.increase').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = parseInt(this.dataset.id);
-                    updateCartQuantity(productId, 1);
-                });
-            });
-
-            document.querySelectorAll('.decrease').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = parseInt(this.dataset.id);
-                    updateCartQuantity(productId, -1);
-                });
-            });
-
-            document.querySelectorAll('.remove').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = parseInt(this.dataset.id);
-                    removeFromCart(productId);
-                });
-            });
-        }
-    }
-
-    function updateCartQuantity(productId, change) {
-        const item = cart.find(product => product.id === productId);
-        if (item) {
-            item.quantity += change;
-            if (item.quantity <= 0) {
-                const index = cart.indexOf(item);
-                if (index > -1) {
-                    cart.splice(index, 1);
-                }
-            }
-            localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
-        }
-    }
-
-    function removeFromCart(productId) {
-        const index = cart.findIndex(product => product.id === productId);
-        if (index > -1) {
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
-        }
-        renderCart();
-    }
-
-   // Xử lý sự kiện cho nút thanh toán
-    checkoutButton.addEventListener('click', function() {
-        const fullName = document.getElementById('full-name').value.trim();
-        const address = document.getElementById('address').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-
-        // Kiểm tra xem các trường địa chỉ có được nhập hay không
-        if (!fullName || !address || !phone) {
-            alert('Vui lòng nhập đầy đủ thông tin địa chỉ nhận hàng.');
-            return;
-        }
-
-        if (cart.length === 0) {
-            alert('Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm trước khi thanh toán.');
-            return;
-        }
-
-        // Tạo đối tượng dữ liệu để gửi
-        const orderData = {
-            cart: cart,
-            fullName: fullName,
-            address: address,
-            phone: phone
-        };
-
-        // Gửi thông tin giỏ hàng và thông tin người dùng đến server
-        fetch('process_checkout.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData), // Gửi dữ liệu đã tạo
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Có lỗi xảy ra trong quá trình thanh toán.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert('Thanh toán thành công!'); // Hoặc xử lý theo phản hồi từ server
-            localStorage.removeItem('cart'); // Xóa giỏ hàng sau khi thanh toán
-            location.reload(); // Tải lại trang để cập nhật giỏ hàng
-        })
-        .catch(error => {
-            alert(`Lỗi: ${error.message}`);
-        });
+        document.getElementById('phone').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Chỉ cho phép số
     });
+        const cartContainer = document.getElementById('cart-items');
+        const itemCount = document.getElementById('item-count');
+        const totalPrice = document.getElementById('total-price');
+        const checkoutButton = document.getElementById('checkout-button');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function renderCart() {
+            cartContainer.innerHTML = '';
+            let total = 0;
+            let totalItems = 0;
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = '<p>Giỏ hàng của bạn trống.</p>';
+                itemCount.textContent = 0; // Đặt số lượng sản phẩm về 0
+                totalPrice.textContent = '0 VNĐ'; // Đặt tổng giá về 0
+            } else {
+                cart.forEach(item => {
+                    total += parseFloat(item.price) * item.quantity;
+                    totalItems += item.quantity;
+
+                    cartContainer.innerHTML += `
+                        <article class="cart_card">
+                            <div class="cart_box">
+                                <img src="${item.img}" alt="${item.title}" class="cart_img">
+                            </div>
+
+                            <div class="cart_details">
+                                <h3 class="cart_title">${item.title}</h3>
+                                <span class="cart_price">${item.price} VNĐ</span>
+
+                                <div class="cart_amount">
+                                    <div class="cart_amount-content">
+                                        <span class="cart_amount-box decrease" data-id="${item.id}">
+                                            <i class="bx bx-minus"></i>
+                                        </span>
+
+                                        <span class="cart_amount-number">${item.quantity}</span>
+
+                                        <span class="cart_amount-box increase" data-id="${item.id}">
+                                            <i class="bx bx-plus"></i>
+                                        </span>
+                                    </div>
+
+                                    <i class="bx bx-trash-alt cart_amount-trash remove" data-id="${item.id}"></i>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                });
+
+                itemCount.textContent = totalItems;
+                totalPrice.textContent = `${total.toLocaleString()},000 VNĐ`;
+
+                // Thêm sự kiện cho các nút tăng và giảm
+                document.querySelectorAll('.increase').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = parseInt(this.dataset.id);
+                        updateCartQuantity(productId, 1);
+                    });
+                });
+
+                document.querySelectorAll('.decrease').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = parseInt(this.dataset.id);
+                        updateCartQuantity(productId, -1);
+                    });
+                });
+
+                document.querySelectorAll('.remove').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = parseInt(this.dataset.id);
+                        removeFromCart(productId);
+                    });
+                });
+            }
+        }
+
+        function updateCartQuantity(productId, change) {
+            const item = cart.find(product => product.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    const index = cart.indexOf(item);
+                    if (index > -1) {
+                        cart.splice(index, 1);
+                    }
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCart();
+            }
+        }
+
+        function removeFromCart(productId) {
+            const index = cart.findIndex(product => product.id === productId);
+            if (index > -1) {
+                cart.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCart();
+            }
+            renderCart();
+        }
+
+    // Xử lý sự kiện cho nút thanh toán
+        checkoutButton.addEventListener('click', function() {
+            const fullName = document.getElementById('full-name').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+
+            // Kiểm tra xem các trường địa chỉ có được nhập hay không
+            if (!fullName || !address || !phone) {
+                alert('Vui lòng nhập đầy đủ thông tin địa chỉ nhận hàng.');
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm trước khi thanh toán.');
+                return;
+            }
+
+            // Tạo đối tượng dữ liệu để gửi
+            const orderData = {
+                cart: cart,
+                fullName: fullName,
+                address: address,
+                phone: phone
+            };
+
+            // Gửi thông tin giỏ hàng và thông tin người dùng đến server
+            fetch('process_checkout.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData), // Gửi dữ liệu đã tạo
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Có lỗi xảy ra trong quá trình thanh toán.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Thanh toán thành công!'); // Hoặc xử lý theo phản hồi từ server
+                localStorage.removeItem('cart'); // Xóa giỏ hàng sau khi thanh toán
+                location.reload(); // Tải lại trang để cập nhật giỏ hàng
+            })
+            .catch(error => {
+                alert(`Lỗi: ${error.message}`);
+            });
+        });
 
 
 
-    // Render giỏ hàng khi trang được tải
-    renderCart();
-});
+        // Render giỏ hàng khi trang được tải
+        renderCart();
+    });
 
     </script>
       

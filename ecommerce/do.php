@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Email không tồn tại!'; // Lưu thông báo lỗi
     }
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -304,9 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="shop_items grid">
                     <?php
                     // Truy vấn để lấy sản phẩm cụ thể
-                    $productIds = [4, 5, 6, 8]; // ID của các sản phẩm bạn muốn lấy
-                    $ids = implode(',', $productIds);
-                    $query = "SELECT * FROM products WHERE id IN ($ids)";
+                    $query = "SELECT * FROM products WHERE category = 'quần áo'"; // Giả sử bạn có cột 'category' trong bảng products
                     $result = $conn->query($query);
 
                     if ($result->num_rows > 0) {

@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['role']) && $_SESSI
         $interval = $now->diff($createdAt);
 
         // Kiểm tra xem sản phẩm có được thêm trong vòng 30 ngày không
-        if ($interval->days <= 30) {
+        if ($interval->days <= 10) {
             // Xóa sản phẩm
             $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
             $stmt->bind_param("i", $id);
